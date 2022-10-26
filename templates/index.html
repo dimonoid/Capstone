@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Crima Vision</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
+    </head>
+    <body>
+        <div class="float-container">
+
+            <div class="float-child">
+              <div class="green">
+                <h2 class="mt-5">Live Stream</h2>
+                <img src="{{ url_for('video_feed') }}">
+              </div>
+            </div>
+            <div class="float-child">
+              <div class="blue">
+                <h2>Log</h2>
+                <p>Person detected: {{detected_person}}</p>
+              </div>
+        </div>
+    </body>
+</html>
