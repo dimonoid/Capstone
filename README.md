@@ -18,12 +18,10 @@ Mohammad Osama – 8770948
 
 * https://www.python.org/downloads/
 * Python 3.10, during instalation click "install for all users", and "add to PATH"
-
-
+*
 * https://cmake.org/download/
 * pip3 install cmake
-
-
+*
 * pip3 install Flask
 * pip3 install dlib
 * pip3 install opencv-python
