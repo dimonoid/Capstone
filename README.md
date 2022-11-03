@@ -16,6 +16,8 @@ Mohammad Osama – 8770948
 
 ### Dependencies
 
+* https://cmake.org/download/
+
 * pip3 install Flask
 * pip3 install cmake
 * pip3 install dlib
