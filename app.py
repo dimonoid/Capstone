@@ -34,13 +34,14 @@ known_face_names = [
     "Humza"
 ]
 
-# Initialize some variables
-face_locations = []
-face_encodings = []
-face_names = []
 process_this_frame = True
 
 def gen_frames():
+    # Initialize some variables
+    face_locations = []
+    face_encodings = []
+    face_names = []
+
     camera = cv2.VideoCapture(0)
 
     while True:       
