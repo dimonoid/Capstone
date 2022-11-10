@@ -9,28 +9,29 @@ app = Flask(__name__)
 #camera = cv2.VideoCapture(cv2.CAP_V4L2)
 
 # Load a sample picture and learn how to recognize it.
-ahmad0 = face_recognition.load_image_file("images/ahmad0.jpg")
-ahmad0_face_encoding = face_recognition.face_encodings(ahmad0)[0]
-
-# Load a sample picture and learn how to recognize it.
-ahmad1 = face_recognition.load_image_file("images/ahmad1.jpg")
-ahmad1_face_encoding = face_recognition.face_encodings(ahmad1)[0]
+ahmad = face_recognition.load_image_file("images/Ahmad.jpg")
+ahmad_face_encoding = face_recognition.face_encodings(ahmad)[0]
 
 # Load a second sample picture and learn how to recognize it.
-ahmad2 = face_recognition.load_image_file("images/ahmad2.jpg")
-ahmad2_face_encoding = face_recognition.face_encodings(ahmad2)[0]
+mohamad = face_recognition.load_image_file("images/Mohamad.jpg")
+mohamad_face_encoding = face_recognition.face_encodings(mohamad)[0]
+
+# Load a second sample picture and learn how to recognize it.
+humza = face_recognition.load_image_file("images/Humza.jpg")
+humza_face_encoding = face_recognition.face_encodings(humza)[0]
+
 
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [
-    ahmad0_face_encoding,
-    ahmad1_face_encoding,
-    ahmad2_face_encoding
+    ahmad_face_encoding,
+    mohamad_face_encoding,
+    humza_face_encoding
 ]
 known_face_names = [
-    "ahmad0",
-    "ahmad1",
-    "ahmad2"
+    "Ahmad",
+    "Mohamad",
+    "Humza"
 ]
 
 # Initialize some variables
@@ -67,8 +68,8 @@ def gen_frames():
                     name = known_face_names[best_match_index]
 
                 face_names.append(name)  ## Label of the image being matched!
-                print(name)
-                log_person(name)
+                percent_accuracy = np.round((1-face_distances[best_match_index]) * 100 , 2)
+                print("Accuracy: " + str(percent_accuracy) + " %")
             
 
             # Display the results
