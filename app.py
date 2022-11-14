@@ -3,10 +3,24 @@ from flask import Flask, render_template, Response, flash
 import cv2
 import face_recognition
 import numpy as np
+import os
+from flask import request, url_for, redirect
+from flask_sqlalchemy import SQLAlchemy
+
+from sqlalchemy.sql import func
 
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__)
 #camera = cv2.VideoCapture(cv2.CAP_V4L2)
+
+#set path to database and initialize
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+    'sqlite:///' + os.path.join(basedir, 'Databse.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 # Load a sample picture and learn how to recognize it.
 ahmad = face_recognition.load_image_file("images/Ahmad.jpg")
@@ -108,3 +122,11 @@ def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 if __name__=='__main__':
     app.run(host='0.0.0.0', debug=True, threaded=True) 
+    
+class Plate(db.Model):
+    id=db.Column(db.String(7), nullable = False, unique=True)
+    name=db.Column(db.String(100), nullable=False)
+    info=db.Column(db.String(500), nullable=False)
+    
+    def __repr__(self):
+        return f'<Plate {self.id}>'
