@@ -65,11 +65,13 @@ def gen_frames():
                 # Or instead, use the known face with the smallest distance to the new face
                 face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
                 best_match_index = np.argmin(face_distances)
-                if matches[best_match_index]:
+
+                ## Calculate the accuracy of the face detected (compared with the highest matched face)
+                percent_accuracy = np.round((1-face_distances[best_match_index]) * 100 , 2)
+                if matches[best_match_index] and percent_accuracy >= 50:
                     name = known_face_names[best_match_index]
 
                 face_names.append(name)  ## Label of the image being matched!
-                percent_accuracy = np.round((1-face_distances[best_match_index]) * 100 , 2)
                 print("Accuracy: " + str(percent_accuracy) + " %")
             
 
