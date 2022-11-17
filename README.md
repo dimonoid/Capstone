@@ -1,4 +1,4 @@
-# CEG4912 - Crima Vision
+# CEG4912 - Smart Glasses
 
 Project source code repository
 
