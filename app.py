@@ -1,6 +1,7 @@
 from json import detect_encoding
 from flask import Flask, render_template, Response, flash
 import cv2
+import glob
 import face_recognition
 import numpy as np
 import os
@@ -11,7 +12,6 @@ from sqlalchemy.sql import func
 
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__)
-#camera = cv2.VideoCapture(cv2.CAP_V4L2)
 
 #set path to database and initialize
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -22,31 +22,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# Load a sample picture and learn how to recognize it.
-ahmad = face_recognition.load_image_file("images/Ahmad.jpg")
-ahmad_face_encoding = face_recognition.face_encodings(ahmad)[0]
-
-# Load a second sample picture and learn how to recognize it.
-mohamad = face_recognition.load_image_file("images/Mohamad.jpg")
-mohamad_face_encoding = face_recognition.face_encodings(mohamad)[0]
-
-# Load a second sample picture and learn how to recognize it.
-humza = face_recognition.load_image_file("images/Humza.jpg")
-humza_face_encoding = face_recognition.face_encodings(humza)[0]
-
-
+### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
 # Create arrays of known face encodings and their names
-known_face_encodings = [
-    ahmad_face_encoding,
-    mohamad_face_encoding,
-    humza_face_encoding
-]
-known_face_names = [
-    "Ahmad",
-    "Mohamad",
-    "Humza"
-]
+known_face_names = list()
+known_face_encodings = list()
+
+# Load all images names into lists 
+
+images = (os.listdir('images/'))
+imagesRGB = [face_recognition.load_image_file(file) for file in glob.glob('images/*.jpg')]
+
+# Add the known names as strings into an array & process their encodings
+for i in range(len(images)):
+    known_face_names.append(images[i][:-4])
+    sample_face_encoding = face_recognition.face_encodings(imagesRGB[i])[0]
+    known_face_encodings.append(sample_face_encoding)
 
 process_this_frame = True
 
