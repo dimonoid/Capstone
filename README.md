@@ -28,5 +28,6 @@ Mohammad Osama – 8770948
 * pip3 install dlib
 * pip3 install opencv-python
 * pip3 install face-recognition
+* pip3 install Flask-SQLAlchemy
 
 To run the flask server: python3 app.py
