@@ -11,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 
 # Get a reference to webcam #0 (the default one)
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', )
 
 #set path to database and initialize
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -107,6 +107,18 @@ def log_person(name):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/lpPage', methods=['GET', 'POST'])
+def lpPage():
+    if request.method == 'POST':
+        return redirect(url_for('index'))
+    return render_template('lpPage.html')
+
+@app.route('/fPage', methods=['GET', 'POST'])
+def fPage():
+    if request.method == 'POST':
+        return redirect(url_for('index'))
+    return render_template('fPage.html')
 
 @app.route('/video_feed')
 def video_feed():
