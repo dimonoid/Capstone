@@ -7,6 +7,7 @@ import numpy as np
 import os
 from flask import request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+import sqlite3
 
 from sqlalchemy.sql import func
 
@@ -125,11 +126,28 @@ def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 if __name__=='__main__':
     app.run(host='0.0.0.0', debug=True, threaded=True) 
-    
+
+#class to declare a license plate    
 class Plate(db.Model):
     id=db.Column(db.String(7), nullable = False, unique=True)
     name=db.Column(db.String(100), nullable=False)
     info=db.Column(db.String(500), nullable=False)
     
     def __repr__(self):
-        return f'<Plate {self.id}>'
+        return f'<Plate {self.id}>'        
+
+#compare string detected from license plate to plate table in database
+def plateDetected(str):
+    conn = sqlite3.connect('Database.db')
+    cur=conn.cursor()
+    cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
+
+    records = curr.fetchall(str)
+    for row in records:
+        print("License Plate Number: ", row[0])
+        print("Owner: ", row[1])
+        print("Infractions: ", row[2])
+        print("/n")
+        
+    cur.close()
+
