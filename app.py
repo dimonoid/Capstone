@@ -42,11 +42,13 @@ for i in range(len(images)):
 
 process_this_frame = True
 
+
 def gen_frames():
     # Initialize some variables
     face_locations = []
     face_encodings = []
     face_names = []
+    currentName = None
 
     camera = cv2.VideoCapture(0)
 
@@ -78,9 +80,13 @@ def gen_frames():
                     name = known_face_names[best_match_index]
 
                 face_names.append(name)  ## Label of the image being matched!
-                print("Accuracy: " + str(percent_accuracy) + " %")
-            
 
+                ## Only print accuracy if it redetects a new person/unknown
+                if(name != currentName):
+                    print("Accuracy: " + str(percent_accuracy) + " %")
+
+                currentName = name
+            
             # Display the results
             for (top, right, bottom, left), name in zip(face_locations, face_names):
                 # Scale back up face locations since the frame we detected in was scaled to 1/4 size
