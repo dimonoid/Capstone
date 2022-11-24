@@ -154,7 +154,7 @@ def plate_detected(str):
     cur=conn.cursor()
     cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
 
-    records = curr.fetchall(str)
+    records = cur.fetchall(str)
     for row in records:
         print("License Plate Number: ", row[0])
         print("Owner: ", row[1])
