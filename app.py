@@ -149,7 +149,7 @@ class Plate(db.Model):
         return f'<Plate {self.id}>'        
 
 #compare string detected from license plate to plate table in database
-def plateDetected(str):
+def plate_detected(str):
     conn = sqlite3.connect('Database.db')
     cur=conn.cursor()
     cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
@@ -162,4 +162,15 @@ def plateDetected(str):
         print("/n")
         
     cur.close()
+
+#add License Plate to database
+def add_plate(num, name, infraction):
+	try:
+		con = sql.connect('Database.db')
+		c = con.cursor()
+		c.execute(%(num, plate, infraction))
+		con.commit()
+	except:
+		print("Error adding plate to db")
+
 
