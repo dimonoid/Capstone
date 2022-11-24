@@ -23,6 +23,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+currentName = ""
+percent_accuracy = None
+
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
 # Create arrays of known face encodings and their names
@@ -43,12 +46,12 @@ for i in range(len(images)):
 process_this_frame = True
 
 
+
 def gen_frames():
     # Initialize some variables
     face_locations = []
     face_encodings = []
     face_names = []
-    currentName = None
 
     camera = cv2.VideoCapture(0)
 
@@ -75,6 +78,7 @@ def gen_frames():
                 best_match_index = np.argmin(face_distances)
 
                 ## Calculate the accuracy of the face detected (compared with the highest matched face)
+                global percent_accuracy
                 percent_accuracy = np.round((1-face_distances[best_match_index]) * 100 , 2)
                 if matches[best_match_index] and percent_accuracy >= 50:
                     name = known_face_names[best_match_index]
@@ -82,6 +86,7 @@ def gen_frames():
                 face_names.append(name)  ## Label of the image being matched!
 
                 ## Only print accuracy if it redetects a new person/unknown
+                global currentName
                 if(name != currentName):
                     print("Accuracy: " + str(percent_accuracy) + " %")
 
@@ -108,8 +113,9 @@ def gen_frames():
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-def log_person(name):
-    return name
+
+def log_person():
+    return currentName
 
 @app.route('/')
 def index():
@@ -125,7 +131,7 @@ def lpPage():
 def fPage():
     if request.method == 'POST':
         return redirect(url_for('index'))
-    return render_template('fPage.html')
+    return render_template('fPage.html', displayName = currentName, displayAccuracy = str(percent_accuracy) + " %")
 
 @app.route('/video_feed')
 def video_feed():
