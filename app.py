@@ -164,11 +164,11 @@ def plate_detected(str):
     cur.close()
 
 #add License Plate to database
-def add_plate(num, name, infraction):
+def add_plate(LicensePlate, Owner, Info):
 	try:
 		con = sql.connect('Database.db')
 		c = con.cursor()
-		c.execute(%(num, plate, infraction))
+		c.execute("INSERT INTO LicensePlate (LicensePlate, Owner, Info) VALUES (%s, %s, %s)" %(LicensePlate, Owner, Info))
 		con.commit()
 	except:
 		print("Error adding plate to db")
