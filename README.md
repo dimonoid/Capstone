@@ -17,17 +17,14 @@ Mohammad Osama – 8770948
 ### Dependencies
 
 * https://www.python.org/downloads/
-* Python 3.10, during instalation click "install for all users", and "add to PATH"
-
-
+* Python 3.10, during installation click "install for all users", and "add to PATH"
 * https://cmake.org/download/
-* pip3 install cmake
 
+* `pip3 install cmake`
+* `pip3 install Flask`
+* `pip3 install dlib`
+* `pip3 install opencv-python`
+* `pip3 install face-recognition`
+* `pip3 install Flask Flask-SQLAlchemy`
 
-* pip3 install Flask
-* pip3 install dlib
-* pip3 install opencv-python
-* pip3 install face-recognition
-* pip3 install Flask Flask-SQLAlchemy
-
-To run the flask server: python3 app.py
+To run the flask application: `python3 app.py`
