@@ -9,9 +9,6 @@ from flask import request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
-#database function imports
-from dbFunc import plate_detected, compare_face, add_plate, add_face
-
 from sqlalchemy.sql import func
 
 # Get a reference to webcam #0 (the default one)
