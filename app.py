@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
 from sqlalchemy.sql import func
+from currentLocation import displayLocation
 
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__, static_url_path='', )
@@ -115,7 +116,7 @@ def index():
 def lpPage():
     if request.method == 'POST':
         return redirect(url_for('index'))
-    return render_template('lpPage.html')
+    return render_template('lpPage.html', displayGpsResult = displayLocation())
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
