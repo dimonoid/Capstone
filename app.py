@@ -26,8 +26,6 @@ db = SQLAlchemy(app)
 currentName = ""
 percent_accuracy = None
 
-gpsResult = ""
-
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
 # Create arrays of known face encodings and their names
@@ -126,7 +124,7 @@ def index():
 def lpPage():
     if request.method == 'POST':
         return redirect(url_for('index'))
-    return render_template('lpPage.html', displayGpsResult = getPositionData(gpsd))
+    return render_template('lpPage.html')
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
