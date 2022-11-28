@@ -172,5 +172,3 @@ def add_plate(LicensePlate, Owner, Info):
 		con.commit()
 	except:
 		print("Error adding plate to db")
-
-
