@@ -200,3 +200,4 @@ def compare_face(str):
 	cur.close()
 
 
+		print("Error adding plate to db")
