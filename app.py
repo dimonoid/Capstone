@@ -11,6 +11,18 @@ import sqlite3
 
 from sqlalchemy.sql import func
 
+##  pip install gps
+## pip install geopy
+from gps import *
+import time
+from geopy.geocoders import Nominatim
+
+from gpsLocation import getPositionData
+
+
+# gps data from sensor
+gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
+
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__, static_url_path='', )
 
@@ -25,6 +37,8 @@ db = SQLAlchemy(app)
 
 currentName = ""
 percent_accuracy = None
+
+gpsResult = ""
 
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
@@ -113,7 +127,6 @@ def gen_frames():
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-
 def log_person():
     return currentName
 
@@ -125,7 +138,7 @@ def index():
 def lpPage():
     if request.method == 'POST':
         return redirect(url_for('index'))
-    return render_template('lpPage.html')
+    return render_template('lpPage.html', displayGpsResult = getPositionData(gpsd))
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
