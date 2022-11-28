@@ -166,15 +166,14 @@ def plate_detected(str):
     conn = sqlite3.connect('Database.db')
     cur=conn.cursor()
     cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
-
+     
     records = cur.fetchall()
     for row in records:
-		if(row[0] == str):
-			print("License Plate Number: ", row[0])
-			print("Owner: ", row[1])
-			print("Infractions: ", row[2])
-			print("/n")
-        
+        if(row[0] == str):
+            print("License Plate Number: ", row[0])
+            print("Owner: ", row[1])
+            print("Infractions: ", row[2])
+            print("/n")     
     cur.close()
 
 #add License Plate to database
@@ -207,10 +206,7 @@ def compare_face(str):
 	for row in records:
 		if(row[0] == str):
 			print("Name: ", row[0])
-			print("Crimes: ", row[1]
+			print("Crimes: ", row[1])
 			print("/n")
 		
 	cur.close()
-
-
-		print("Error adding plate to db")
