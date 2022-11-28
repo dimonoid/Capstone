@@ -11,6 +11,18 @@ import sqlite3
 
 from sqlalchemy.sql import func
 
+##  pip install gps
+## pip install geopy
+from gps import *
+import time
+from geopy.geocoders import Nominatim
+
+from gpsLocation import getPositionData
+
+
+# gps data from sensor
+gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
+
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__, static_url_path='', )
 
@@ -25,6 +37,8 @@ db = SQLAlchemy(app)
 
 currentName = ""
 percent_accuracy = None
+
+gpsResult = ""
 
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
@@ -113,7 +127,6 @@ def gen_frames():
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-
 def log_person():
     return currentName
 
@@ -125,7 +138,7 @@ def index():
 def lpPage():
     if request.method == 'POST':
         return redirect(url_for('index'))
-    return render_template('lpPage.html')
+    return render_template('lpPage.html', displayGpsResult = getPositionData(gpsd))
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
@@ -153,14 +166,14 @@ def plate_detected(str):
     conn = sqlite3.connect('Database.db')
     cur=conn.cursor()
     cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
-
-    records = cur.fetchall(str)
+     
+    records = cur.fetchall()
     for row in records:
-        print("License Plate Number: ", row[0])
-        print("Owner: ", row[1])
-        print("Infractions: ", row[2])
-        print("/n")
-        
+        if(row[0] == str):
+            print("License Plate Number: ", row[0])
+            print("Owner: ", row[1])
+            print("Infractions: ", row[2])
+            print("/n")     
     cur.close()
 
 #add License Plate to database
@@ -172,3 +185,28 @@ def add_plate(LicensePlate, Owner, Info):
 		con.commit()
 	except:
 		print("Error adding plate to db")
+
+#add Face to database
+def add_face(Name, Crime):
+	try:
+		con=sql.connect('Database.db')
+		c=con.cursor()
+		c.execute("INSERT INTO Criminals (Name, Crime) VALUES (%b, %s, %s)" %(Name, Crime))
+		con.commit()
+	except:
+		print("Error adding face to db")
+
+#compare string of person's name to database
+def compare_face(str):
+	conn = sqlite3.connect('Database.db')
+	cur=conn.cursor()
+	cur.execute("SELECT * FROM Criminals WHERE one=?", (columnchosen,))
+	
+	records = curr.fetchall()
+	for row in records:
+		if(row[0] == str):
+			print("Name: ", row[0])
+			print("Crimes: ", row[1])
+			print("/n")
+		
+	cur.close()
