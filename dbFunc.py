@@ -11,6 +11,9 @@ import sqlite3
 
 from sqlalchemy.sql import func
 
+#Initialize app
+app = Flask(__name__)
+
 #set path to database and initialize
 basedir = os.path.abspath(os.path.dirname(__file__))
 
