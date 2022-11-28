@@ -11,18 +11,6 @@ import sqlite3
 
 from sqlalchemy.sql import func
 
-##  pip install gps
-## pip install geopy
-from gps import *
-import time
-from geopy.geocoders import Nominatim
-
-from gpsLocation import getPositionData
-
-
-# gps data from sensor
-gpsd = gps(mode=WATCH_ENABLE|WATCH_NEWSTYLE)
-
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__, static_url_path='', )
 
