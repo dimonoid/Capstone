@@ -9,22 +9,13 @@ from flask import request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
 
-#database imports
+#database function imports
 from dbFunc import plate_detected, compare_face, add_plate, add_face
 
 from sqlalchemy.sql import func
 
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__, static_url_path='', )
-
-#set path to database and initialize
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'sqlite:///' + os.path.join(basedir, 'Databse.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
 
 currentName = ""
 percent_accuracy = None
