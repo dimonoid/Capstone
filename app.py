@@ -154,12 +154,13 @@ def plate_detected(str):
     cur=conn.cursor()
     cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
 
-    records = cur.fetchall(str)
+    records = cur.fetchall()
     for row in records:
-        print("License Plate Number: ", row[0])
-        print("Owner: ", row[1])
-        print("Infractions: ", row[2])
-        print("/n")
+		if(row[0] == str):
+			print("License Plate Number: ", row[0])
+			print("Owner: ", row[1])
+			print("Infractions: ", row[2])
+			print("/n")
         
     cur.close()
 
@@ -172,5 +173,30 @@ def add_plate(LicensePlate, Owner, Info):
 		con.commit()
 	except:
 		print("Error adding plate to db")
+
+#add Face to database
+def add_face(Name, Crime):
+	try:
+		con=sql.connect('Database.db')
+		c=con.cursor()
+		c.execute("INSERT INTO Criminals (Name, Crime) VALUES (%b, %s, %s)" %(Name, Crime))
+		con.commit()
+	except:
+		print("Error adding face to db")
+
+#compare string of person's name to database
+def compare_face(str):
+	conn = sqlite3.connect('Database.db')
+	cur=conn.cursor()
+	cur.execute("SELECT * FROM Criminals WHERE one=?", (columnchosen,))
+	
+	records = curr.fetchall()
+	for row in records:
+		if(row[0] == str):
+			print("Name: ", row[0])
+			print("Crimes: ", row[1]
+			print("/n")
+		
+	cur.close()
 
 
