@@ -9,7 +9,7 @@ from collections import deque
 
 
 def readLP(filename):
-    pytesseract.pytesseract.tesseract_cmd= r'C:\Program Files\Tesseract-OCR\tesseract' 
+    #pytesseract.pytesseract.tesseract_cmd= r'C:\Program Files\Tesseract-OCR\tesseract' 
     image = cv2.imread("uploads/"+filename)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #gray image
     noise_reduction = cv2.bilateralFilter(gray,13,15,15) #apply filters for noise reduction
@@ -43,5 +43,7 @@ def readLP(filename):
     print("License plate number is: ", text)
     
     d = deque(deplate_detected(text))
+
+    return text
 
 
