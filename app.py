@@ -1,28 +1,18 @@
-from json import detect_encoding
-from flask import Flask, render_template, Response, flash, send_from_directory
-import cv2
 import glob
+
 import face_recognition
-import numpy as np
-import os
-from flask import request, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
-import sqlite3
-from flask_uploads import UploadSet, configure_uploads, IMAGES, configure_uploads
+from flask import send_from_directory
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
-from ALPR import *
 
-from sqlalchemy.sql import func
+from ALPR import *
 from currentLocation import displayLocation
 from dbFunc import *
 
-import random
-
 # Initialize app
 app = Flask(__name__, static_url_path='', )
-
 
 # Code needed for image uploading
 app.config['SECRET_KEY'] = 'capstone123'
@@ -31,6 +21,7 @@ app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 
+
 class UploadForm(FlaskForm):
     photo = FileField(
         validators=[
@@ -38,7 +29,7 @@ class UploadForm(FlaskForm):
             FileRequired('File field should not be empty.')
         ]
     )
-    submit = SubmitField('Upload') 
+    submit = SubmitField('Upload')
 
 
 currentName = ""
@@ -65,16 +56,10 @@ for i in range(len(images)):
 process_this_frame = True
 
 
-
 def gen_frames():
-    # Initialize some variables
-    face_locations = []
-    face_encodings = []
-    face_names = []
-
     camera = cv2.VideoCapture(0)
 
-    while True:       
+    while True:
         success, frame = camera.read()
         if not success:
             break
@@ -82,8 +67,8 @@ def gen_frames():
             # Resize frame of video to 1/4 size for faster face recognition processing
             small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
             # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
-            rgb_small_frame = small_frame[:, :, ::-1] 
-            
+            rgb_small_frame = small_frame[:, :, ::-1]
+
             # Find all the faces and face encodings in the current frame of video
             face_locations = face_recognition.face_locations(rgb_small_frame)
             face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
@@ -98,7 +83,7 @@ def gen_frames():
 
                 ## Calculate the accuracy of the face detected (compared with the highest matched face)
                 global percent_accuracy
-                percent_accuracy = np.round((1-face_distances[best_match_index]) * 100 , 2)
+                percent_accuracy = np.round((1 - face_distances[best_match_index]) * 100, 2)
                 if matches[best_match_index] and percent_accuracy >= 50:
                     name = known_face_names[best_match_index]
 
@@ -106,11 +91,11 @@ def gen_frames():
 
                 ## Only print accuracy if it redetects a new person/unknown
                 global currentName
-                if(name != currentName):
+                if (name != currentName):
                     print("Accuracy: " + str(percent_accuracy) + " %")
 
                 currentName = name
-            
+
             # Display the results
             for (top, right, bottom, left), name in zip(face_locations, face_names):
                 # Scale back up face locations since the frame we detected in was scaled to 1/4 size
@@ -130,50 +115,59 @@ def gen_frames():
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 
 def log_person():
     return currentName
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/lpPage', methods=['GET', 'POST'])
 def lpPage():
     form = UploadForm()
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
-        file_url = url_for('get_file', filename = filename)
+        file_url = url_for('get_file', filename=filename)
         global display_lpResult
         display_lpResult = readLP(filename)
-        print("Uploaded file: " + filename) ## Variable 'filename' stores the name of the image selected, e.g. im4.png
+        print("Uploaded file: " + filename)  ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
-    return render_template('lpPage.html', displayGpsResult = displayLocation(), form = form, file_url=file_url, display_lpResult = display_lpResult)
+    return render_template('lpPage.html', displayGpsResult=displayLocation(), form=form, file_url=file_url,
+                           display_lpResult=display_lpResult)
+
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
     if request.method == 'POST':
         return redirect(url_for('index'))
-    return render_template('fPage.html', displayName = currentName, displayAccuracy = str(percent_accuracy) + " %")
+    return render_template('fPage.html', displayName=currentName, displayAccuracy=str(percent_accuracy) + " %")
+
 
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 @app.route('/uploads/<filename>')
 def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
 
+
 @app.route("/currentName")
 def updateCurrentName():
     return f"{currentName}"
+
 
 @app.route("/displayAccuracy")
 def updateAccuracy():
     return str(percent_accuracy) + "%"
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, threaded=True)
