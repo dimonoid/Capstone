@@ -11,6 +11,7 @@ import sqlite3
 
 from sqlalchemy.sql import func
 from currentLocation import displayLocation
+from dbFunc import *
 
 # Get a reference to webcam #0 (the default one)
 app = Flask(__name__, static_url_path='', )

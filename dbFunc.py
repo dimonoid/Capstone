@@ -1,9 +1,4 @@
-from json import detect_encoding
 from flask import Flask, render_template, Response, flash
-import cv2
-import glob
-import face_recognition
-import numpy as np
 import os
 from flask import request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
@@ -11,26 +6,36 @@ import sqlite3
 
 from sqlalchemy.sql import func
 
-#Initialize app
-app = Flask(__name__)
+db = SQLAlchemy()
 
-#set path to database and initialize
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-app.config['SQLALCHEMY_DATABASE_URI'] =\
-    'sqlite:///' + os.path.join(basedir, 'Databse.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
+def init_dbFunc():
+    dbFunc = Flask(__name__, instance_relative_config=False)
+    dbFunc.config.from_object('config.Config')
+    
+    db.init_dbFunc(dbFunc)
+    
+    with app.app_context():
+        from . import routes #import routes
+        db.create_all()
+        
+        return dbFunc
 
 #class to declare a license plate    
 class Plate(db.Model):
-    id=db.Column(db.String(7), nullable = False, unique=True)
+    id=db.Column(db.String(7), primary_key=True, nullable = False, unique=True)
     name=db.Column(db.String(100), nullable=False)
     info=db.Column(db.String(500), nullable=False)
     
     def __repr__(self):
         return f'<Plate {self.id}>'        
+
+#class to declare a criminal
+class Face(db.Model):
+    name=db.Column(db.String(18), primary_key=True, nullable= False, unique=True)
+    info=db.Column(db.String(500), nullable=False)
+    
+    def __repr__(self):
+        return f'<Face {self.name}>'
 
 #compare string detected from license plate to plate table in database
 def plate_detected(str):
