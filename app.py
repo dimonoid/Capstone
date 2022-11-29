@@ -12,6 +12,7 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, configure_upload
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
+from ALPR import *
 
 from sqlalchemy.sql import func
 from currentLocation import displayLocation
@@ -141,6 +142,7 @@ def lpPage():
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
         file_url = url_for('get_file', filename = filename)
+        readLP(filename)
         print("Uploaded file: " + filename) ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
