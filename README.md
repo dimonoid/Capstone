@@ -32,5 +32,6 @@ Mohammad Osama – 8770948
 * `pip install geopy`
 * `pip install imutils`
 * `pip install matplotlib`
+* `pip install pytesseract`
 
 To run the flask application: `python3 app.py`
