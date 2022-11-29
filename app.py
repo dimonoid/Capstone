@@ -18,6 +18,8 @@ from sqlalchemy.sql import func
 from currentLocation import displayLocation
 from dbFunc import *
 
+import random
+
 # Initialize app
 app = Flask(__name__, static_url_path='', )
 
@@ -161,6 +163,14 @@ def video_feed():
 @app.route('/uploads/<filename>')
 def get_file(filename):
     return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
+
+@app.route("/currentName")
+def updateCurrentName():
+    return f"{currentName}"
+
+@app.route("/displayAccuracy")
+def updateAccuracy():
+    return str(percent_accuracy) + "%"
 
 
 if __name__=='__main__':

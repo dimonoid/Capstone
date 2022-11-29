@@ -56,9 +56,9 @@
 									<section>
 										<h3 class="major">Detected Person</h3>
 										<div class="inner">
-											<ul class="actions">
-												<li><p> Individual Name : <b>{{ displayName }}</b></p></li>
-												<li><p> Confidence/Accuracy : <b>{{ displayAccuracy }}</b></p></li>
+											<ul class="actions" style="display: inline-block;">
+												<li>Individual Name :<b><p id = "currName"></p></b></li>
+												<li>Confidence :<b><p id = "displayAccuracy"></p></b></li>
 											</ul>
 										</div>
 									</section>
@@ -111,6 +111,35 @@
 			<script src="{{url_for('static', filename='js/breakpoints.min.js')}}"></script>
 			<script src="{{url_for('static', filename='js/util.js')}}"></script>
 			<script src="{{url_for('static', filename='js/main.js')}}"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+			<script>
+			var bar = document.getElementById("currName");
+			setInterval(function(){
+				$.ajax({
+				url: "/currentName",
+				type: "get",
+				success: function(response) {
+					$("#currName").html(response)
+				},
+				error: function(xhr) {
+					//Handel error
+				}
+				}); 
+			}, 1000);
 
+			var bar = document.getElementById("displayAccuracy");
+			setInterval(function(){
+				$.ajax({
+				url: "/displayAccuracy",
+				type: "get",
+				success: function(response) {
+					$("#displayAccuracy").html(response)
+				},
+				error: function(xhr) {
+					//Handel error
+				}
+				}); 
+			}, 1000);
+			</script>
 	</body>
 </html>
