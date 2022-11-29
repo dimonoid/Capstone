@@ -15,3 +15,10 @@ def getLocation():
         i=i-1
     
 getLocation()
+
+def displayLocation():
+    latitude = 45.419510 
+    longitude = -75.678770
+    displayResult = str(latitude)+", "+str(longitude)  
+    displayLocname = geoLoc.reverse(displayResult)
+    return displayLocname
