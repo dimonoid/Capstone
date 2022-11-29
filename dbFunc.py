@@ -7,20 +7,28 @@ from collections import deque
 
 from sqlalchemy.sql import func
 
-db = SQLAlchemy()
+app = Flask(__name__)
 
-def init_dbFunc():
-    dbFunc = Flask(__name__, instance_relative_config=False)
-    dbFunc.config.from_object('config.Config')
-    
-    db.init_dbFunc(dbFunc)
-    
-    with app.app_context():
-        from . import routes #import routes
-        db.create_all()
-        
-        return dbFunc
+#set name of database for code
+db_name = 'Database.db'
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
+#initialize database, used for SQLAlchemy commands
+db = SQLAlchemy(app)
+
+class Plate(db.Model):
+    __tablename__ = 'LicensePlates'
+    LicensePlate = db.Column(db.String, primary_key=True, nullable=False, unique=True)
+    Owner = db.Column(db.String, nullable=False)
+    Info = db.Column(db.String, nullable=False)
+
+class Criminal(db.Model):
+    __tablename__ = 'Criminals'
+    Name = db.Column(db.String, primary_key=True, nullable=False, unique=True)
+    Crime = db.Column(db.String, nullable=False)
 
 #compare string detected from license plate to plate table in database
 def plate_detected(str):

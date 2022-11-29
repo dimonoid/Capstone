@@ -42,7 +42,7 @@ def readLP(filename):
 
     print("License plate number is: ", text)
     
-    d = deque(deplate_detected(text))
+    d = deque(plate_detected(text))
 
     return text
 
