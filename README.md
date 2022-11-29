@@ -30,5 +30,7 @@ Mohammad Osama – 8770948
 * `pip install flask-uploads`
 * `pip install Flask-WTF`
 * `pip install geopy`
+* `pip install imutils`
+* `pip install matplotlib`
 
 To run the flask application: `python3 app.py`
