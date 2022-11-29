@@ -7,7 +7,7 @@ import re
 
 
 def readLP(filename):
-    pytesseract.pytesseract.tesseract_cmd= r'C:\Program Files\Tesseract-OCR\tesseract' 
+    #pytesseract.pytesseract.tesseract_cmd= r'C:\Program Files\Tesseract-OCR\tesseract' 
     image = cv2.imread("uploads/"+filename)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #gray image
     noise_reduction = cv2.bilateralFilter(gray,13,15,15) #apply filters for noise reduction
@@ -39,5 +39,7 @@ def readLP(filename):
     text = re.sub('[\W_]+', '', text)
 
     print("License plate number is: ", text)
+
+    return text
 
 

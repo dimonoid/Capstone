@@ -43,6 +43,7 @@ class UploadForm(FlaskForm):
 
 currentName = ""
 percent_accuracy = None
+display_lpResult = ""
 
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
@@ -144,11 +145,12 @@ def lpPage():
     if form.validate_on_submit():
         filename = photos.save(form.photo.data)
         file_url = url_for('get_file', filename = filename)
-        readLP(filename)
+        global display_lpResult
+        display_lpResult = readLP(filename)
         print("Uploaded file: " + filename) ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
-    return render_template('lpPage.html', displayGpsResult = displayLocation(), form = form, file_url=file_url)
+    return render_template('lpPage.html', displayGpsResult = displayLocation(), form = form, file_url=file_url, display_lpResult = display_lpResult)
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
