@@ -47,10 +47,24 @@
 								<h2>License Plate Detection</h2>
 								<input type="file" accept="image/*" name="image" id="file" style="display: none">
 								<label for="file">Upload</label>
-								<ul class="actions fit">
-									<li><a href="#" class="button fit">Upload</a></li>
-									<li><a href="#" class="button primary">Submit</a></li>
-								</ul>
+								<form method = "post" enctype="multipart/form-data">
+									{{ form.hidden_tag() }}
+
+									{% for error in form.photo.errors %}
+										<span style="color: red;">{{ error }}</span>
+									{% endfor %}
+									<ul class="actions fit">
+										<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
+										<li><a href="#" class="button primary">{{ form.submit(class="button primary") }}</a></li>
+									</ul>
+									<div>
+										{% if file_url %}
+											<div>
+												<img src="{{ file_url }}" style="width: 400px;">
+											</div>
+										{% endif %}
+									</div>
+								</form>
 								<div class="inner">
 									<ul class="actions">
 										<li><p> Detected license plate : <b>{{ display_lpResult }}</b></p></li>

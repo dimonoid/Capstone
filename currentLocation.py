@@ -14,7 +14,6 @@ def getLocation():
         longitude+=1
         i=i-1
     
-getLocation()
 
 def displayLocation():
     latitude = 45.419510 

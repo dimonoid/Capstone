@@ -1,5 +1,5 @@
 from json import detect_encoding
-from flask import Flask, render_template, Response, flash
+from flask import Flask, render_template, Response, flash, send_from_directory
 import cv2
 import glob
 import face_recognition
@@ -8,13 +8,35 @@ import os
 from flask import request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
+from flask_uploads import UploadSet, configure_uploads, IMAGES, configure_uploads
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from wtforms import SubmitField
 
 from sqlalchemy.sql import func
 from currentLocation import displayLocation
 from dbFunc import *
 
-# Get a reference to webcam #0 (the default one)
+# Initialize app
 app = Flask(__name__, static_url_path='', )
+
+
+# Code needed for image uploading
+app.config['SECRET_KEY'] = 'capstone123'
+app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
+
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
+
+class UploadForm(FlaskForm):
+    photo = FileField(
+        validators=[
+            FileAllowed(photos, 'Only images are allowed.'),
+            FileRequired('File field should not be empty.')
+        ]
+    )
+    submit = SubmitField('Upload') 
+
 
 currentName = ""
 percent_accuracy = None
@@ -115,9 +137,14 @@ def index():
 
 @app.route('/lpPage', methods=['GET', 'POST'])
 def lpPage():
-    if request.method == 'POST':
-        return redirect(url_for('index'))
-    return render_template('lpPage.html', displayGpsResult = displayLocation())
+    form = UploadForm()
+    if form.validate_on_submit():
+        filename = photos.save(form.photo.data)
+        file_url = url_for('get_file', filename = filename)
+        print("Uploaded file: " + filename) ## Variable 'filename' stores the name of the image selected, e.g. im4.png
+    else:
+        file_url = None
+    return render_template('lpPage.html', displayGpsResult = displayLocation(), form = form, file_url=file_url)
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
@@ -128,5 +155,11 @@ def fPage():
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/uploads/<filename>')
+def get_file(filename):
+    return send_from_directory(app.config['UPLOADED_PHOTOS_DEST'], filename)
+
+
 if __name__=='__main__':
     app.run(host='0.0.0.0', debug=True, threaded=True)
