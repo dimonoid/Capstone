@@ -4,6 +4,8 @@ import numpy as np
 import imutils
 import pytesseract
 import re
+from dbFunc import plate_detected
+from collections import deque
 
 
 def readLP(filename):
@@ -39,5 +41,7 @@ def readLP(filename):
     text = re.sub('[\W_]+', '', text)
 
     print("License plate number is: ", text)
+    
+    d = deque(deplate_detected(text))
 
 

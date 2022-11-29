@@ -3,6 +3,7 @@ import os
 from flask import request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3
+from collections import deque
 
 from sqlalchemy.sql import func
 
@@ -30,11 +31,22 @@ def plate_detected(str):
     records = cur.fetchall()
     for row in records:
         if(row[0] == str):
-            print("License Plate Number: ", row[0])
-            print("Owner: ", row[1])
-            print("Infractions: ", row[2])
-            print("/n")     
+            d = deque(row[0], row[1], row[2])
     cur.close()
+    return d
+    
+#compare string of person's name to database
+def compare_face(str):
+    conn = sqlite3.connect('Database.db')
+    cur=conn.cursor()
+    cur.execute("SELECT * FROM Criminals WHERE one=?", (columnchosen,))
+	
+    records = curr.fetchall()
+    for row in records:
+        if(row[0] == str):
+            d = deque(row[0], row[1])
+    cur.close()
+    return d
 
 #add License Plate to database
 def add_plate(LicensePlate, Owner, Info):
@@ -55,18 +67,3 @@ def add_face(Name, Crime):
 		con.commit()
 	except:
 		print("Error adding face to db")
-
-#compare string of person's name to database
-def compare_face(str):
-	conn = sqlite3.connect('Database.db')
-	cur=conn.cursor()
-	cur.execute("SELECT * FROM Criminals WHERE one=?", (columnchosen,))
-	
-	records = curr.fetchall()
-	for row in records:
-		if(row[0] == str):
-			print("Name: ", row[0])
-			print("Crimes: ", row[1])
-			print("/n")
-		
-	cur.close()
