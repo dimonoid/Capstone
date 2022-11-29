@@ -26,5 +26,12 @@ Mohammad Osama – 8770948
 * `pip3 install opencv-python`
 * `pip3 install face-recognition`
 * `pip3 install Flask Flask-SQLAlchemy`
+* `pip install Flask-Reuploaded`
+* `pip install flask-uploads`
+* `pip install Flask-WTF`
+* `pip install geopy`
+* `pip install imutils`
+* `pip install matplotlib`
+* `pip install pytesseract`
 
 To run the flask application: `python3 app.py`
