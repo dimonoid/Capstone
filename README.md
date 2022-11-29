@@ -29,5 +29,6 @@ Mohammad Osama – 8770948
 * `pip install Flask-Reuploaded`
 * `pip install flask-uploads`
 * `pip install Flask-WTF`
+* `pip install geopy`
 
 To run the flask application: `python3 app.py`
