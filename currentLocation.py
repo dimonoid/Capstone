@@ -1,3 +1,4 @@
+from time import sleep
 from geopy.geocoders import Nominatim
 from random import randrange
 
@@ -13,9 +14,11 @@ def getLocation():
         latitude+=1
         longitude+=1
         i=i-1
+    sleep(2)
+    return locname
     
 
-def displayLocation():
+def displayL():
     latitude = 45.419510 
     longitude = -75.678770
     displayResult = str(latitude)+", "+str(longitude)  

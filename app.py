@@ -15,7 +15,7 @@ from wtforms import SubmitField
 from ALPR import *
 
 from sqlalchemy.sql import func
-from currentLocation import displayLocation
+from currentLocation import *
 from dbFunc import *
 
 import random
@@ -150,7 +150,7 @@ def lpPage():
         print("Uploaded file: " + filename) ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
-    return render_template('lpPage.html', displayGpsResult = displayLocation(), form = form, file_url=file_url, display_lpResult = display_lpResult)
+    return render_template('lpPage.html', displayGpsResult = displayL(), form = form, file_url=file_url, display_lpResult = display_lpResult)
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
@@ -173,6 +173,12 @@ def updateCurrentName():
 @app.route("/displayAccuracy")
 def updateAccuracy():
     return str(percent_accuracy) + "%"
+
+@app.route("/displayLocation")
+def displayLocation():
+    displayGpsResult = str(getLocation())
+    return displayGpsResult
+    
 
 
 if __name__=='__main__':

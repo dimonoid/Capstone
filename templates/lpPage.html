@@ -76,6 +76,9 @@
 										<ul class="actions">
 											<li><p> Location : <b>{{ displayGpsResult }}</b></p></li>
 										</ul>
+										<form>
+											<a href=# id=test><button class='btn btn-default'>Test</button></a>
+										</form>
 									</div>
 								</section>
 							</div>
@@ -99,6 +102,20 @@
 			<script src="{{url_for('static', filename='js/breakpoints.min.js')}}"></script>
 			<script src="{{url_for('static', filename='js/util.js')}}"></script>
 			<script src="{{url_for('static', filename='js/main.js')}}"></script>
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+			<script type=text/javascript>
+      		  $(function() {
+         		 $('a#test').on('click', function(e) {
+           			 e.preventDefault()
+           			 $.getJSON("/displayLocation",
+              		  function(data) {
+             	 //do nothing
+            });
+            return false;
+         		 });
+       			 });
+			</script>
+		
 			
 
 	</body>
