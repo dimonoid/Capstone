@@ -32,29 +32,29 @@ class Criminal(db.Model):
 
 #compare string detected from license plate to plate table in database
 def plate_detected(str):
-    conn = sqlite3.connect('Database.db')
-    cur=conn.cursor()
-    cur.execute("SELECT * FROM LicensePlate WHERE one=?", (columnchosen,))
-     
-    records = cur.fetchall()
-    for row in records:
-        if(row[0] == str):
-            d = deque(row[0], row[1], row[2])
-    cur.close()
-    return d
+    try:
+        plates = Plate.query.filter_by(row[0]==str).all()
+        plate_text = '<ul>'
+        for plate in LicensePlates:
+            plate_text += '<li>' + plate.LicensePlate + ', ' + plate.Owner + ', ' + plate.Info + '<li>'
+        plate_text += '<ul>'
+        return plate_text
+    except Exception as e:
+        error_text = "<p>Plate not found or other error </p>"
+        return error_text
     
 #compare string of person's name to database
 def compare_face(str):
-    conn = sqlite3.connect('Database.db')
-    cur=conn.cursor()
-    cur.execute("SELECT * FROM Criminals WHERE one=?", (columnchosen,))
-	
-    records = curr.fetchall()
-    for row in records:
-        if(row[0] == str):
-            d = deque(row[0], row[1])
-    cur.close()
-    return d
+    try:
+        criminals = Criminal.query.filter_by(row[0]==str).all()
+        criminal_text = '<ul>'
+        for criminal in Criminals:
+            criminal_text += '<li>' + criminal.Name + ', ' + criminal.Crime + '<li>'
+        criminal_text += '<ul>'
+        return criminal_text
+    except Exception as e:
+        error_text = "<p>Criminal not found or other error </p>"
+        return error_text
 
 #add License Plate to database
 def add_plate(LicensePlate, Owner, Info):
