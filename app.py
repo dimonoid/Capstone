@@ -58,11 +58,17 @@ for i in range(len(images)):
 process_this_frame = True
 
 
-def gen_frames():
-    camera = cv2.VideoCapture(0)
+def gen_frames(debug=False, filename=None):
+    """Generates facial predictions either from camera or local files"""
+    if not debug:
+        camera = cv2.VideoCapture(0)
 
     while True:
-        success, frame = camera.read()
+        if debug:
+            frame = cv2.imread(filename)
+            success = True
+        else:
+            success, frame = camera.read()
         if not success:
             break
         else:
@@ -93,8 +99,8 @@ def gen_frames():
 
                 ## Only print accuracy if it redetects a new person/unknown
                 global currentName
-                if (name != currentName):
-                    print("Accuracy: " + str(percent_accuracy) + " %")
+                if ((name != currentName) or debug):
+                    print("Accuracy: " + str(percent_accuracy) + "% " + name)
 
                 currentName = name
 
@@ -140,7 +146,9 @@ def lpPage():
         print("Uploaded file: " + filename)  ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
-    return render_template('lpPage.html', displayGpsResult = displayL(), form = form, file_url=file_url, display_lpResult = display_lpResult)
+    return render_template('lpPage.html', displayGpsResult=displayL(), form=form, file_url=file_url,
+                           display_lpResult=display_lpResult)
+
 
 @app.route('/fPage', methods=['GET', 'POST'])
 def fPage():
@@ -168,11 +176,36 @@ def updateCurrentName():
 def updateAccuracy():
     return str(percent_accuracy) + "%"
 
+
 @app.route("/displayLocation")
 def displayLocation():
     displayGpsResult = str(getLocation())
     return displayGpsResult
-    
+
+
+def test1():
+    """All results are unknown means very low false positives, what is good result"""
+    for i in range(100):
+        gen = gen_frames(debug=True, filename="test/face_image_" + str(i) + ".jpg")
+
+        print(i)
+        gen.__next__()
+
+        gen.close()
+
+
+def test2():
+    """Shows only recognizable faces"""
+    for i in ("Ahmad", "Humza", "Leonardo", "Mohamad",):
+        gen = gen_frames(debug=True, filename="images/" + i + ".jpg")
+
+        print(i)
+        gen.__next__()
+
+        gen.close()
+
 
 if __name__ == '__main__':
+    # test1()
+    # test2()
     app.run(host='0.0.0.0', debug=True, threaded=True)

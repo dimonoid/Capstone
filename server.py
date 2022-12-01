@@ -52,6 +52,7 @@ def fit():
 
 
 def save_random_faces(n=10, folder='test'):
+    """Downloads fake face to file"""
     d = set()
     for i in range(n):
 
