@@ -147,12 +147,12 @@ def lpPage():
         con = sqlite3.Connection('Database.db')
         con.row_factory = sqlite3.Row
         cur = con.cursor()
-        
+
         # dbQuery = None if the plate isnt in the database
         dbQuery = find_lp_owner(display_lpResult, cur)
         print(dbQuery)
 
-        #Close connection to database
+        # Close connection to database
         con.close()
 
         print("Uploaded file: " + filename)  ## Variable 'filename' stores the name of the image selected, e.g. im4.png
