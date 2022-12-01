@@ -2,11 +2,11 @@
 
 Project source code repository
 
-Ansh Patel - 300102472
-
 Alexandre St-Martin - 300052137
 
 Ahmad El Mokahal - 300059298
+
+Ansh Patel - 300102472
 
 Dima Cherepovskyi - 300016008
 
