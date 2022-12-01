@@ -10,6 +10,7 @@ from wtforms import SubmitField
 from ALPR import *
 from currentLocation import *
 from dbFunc import *
+from dbFunctions import find_lp_owner
 
 # Initialize app
 app = Flask(__name__, static_url_path='', )
@@ -141,6 +142,19 @@ def lpPage():
         file_url = url_for('get_file', filename=filename)
         global display_lpResult
         display_lpResult = readLP(filename)
+
+        # Initialize database connection
+        con = sqlite3.Connection('Database.db')
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        
+        # dbQuery = None if the plate isnt in the database
+        dbQuery = find_lp_owner(display_lpResult, cur)
+        print(dbQuery)
+
+        #Close connection to database
+        con.close()
+
         print("Uploaded file: " + filename)  ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
