@@ -53,12 +53,13 @@ test1 = find_person("Ahmad")
 print(" ")
 test2 = find_person("Humza")
 print(" ")
-test3 = find_lp_owner("CTKM993") 
+test3 = find_person("Ansh") # Not in database
 print(" ")
-test4 = find_lp_owner("420blazeit")
-
-
-
+test4 = find_lp_owner("CTKM993") 
+print(" ")
+test5 = find_lp_owner("420blazeit")  # Not in database
+print(" ")
+test6 = find_lp_owner("PL8REC")
 
 
 
