@@ -8,8 +8,6 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
 
 from ALPR import *
-
-from sqlalchemy.sql import func
 from currentLocation import *
 from dbFunc import *
 
