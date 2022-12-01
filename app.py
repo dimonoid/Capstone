@@ -156,8 +156,12 @@ def lpPage():
         print(type(dbQuery))
         global display_oResult
         global display_iResult
-        display_oResult = dbQuery['Owner']
-        display_iResult = dbQuery['Info']
+        if dbQuery is None:
+            display_oResult = "Not Found"
+            display_iResult = "Not Found"
+        else:
+            display_oResult = dbQuery['Owner']
+            display_iResult = dbQuery['Info']
 
 
         #Close connection to database
