@@ -12,6 +12,8 @@ from currentLocation import *
 from dbFunc import *
 from dbFunctions import find_lp_owner
 
+
+
 # Initialize app
 app = Flask(__name__, static_url_path='', )
 
@@ -232,4 +234,4 @@ def test2():
 if __name__ == '__main__':
     # test1()
     # test2()
-    app.run(host='0.0.0.0', debug=True, threaded=True)
+    app.run(host='0.0.0.0', debug=True, threaded=True, ssl_context='adhoc')

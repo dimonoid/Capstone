@@ -34,5 +34,6 @@ Mohammad Osama – 8770948
 * `pip3 install matplotlib`
 * `pip3 install pytesseract`
 * `pip3 install numpy` 
+* `pip install pyOpenSSL`
 
 To run the flask application: `python3 app.py`
