@@ -47,6 +47,7 @@
 								<h2>License Plate Detection</h2>
 								<input type="file" accept="image/*" name="image" id="file" style="display: none">
 								<label for="file">Upload</label>
+								
 								<form method = "post" enctype="multipart/form-data">
 									{{ form.hidden_tag() }}
 
@@ -55,7 +56,7 @@
 									{% endfor %}
 									<ul class="actions fit">
 										<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
-										<li><a href="#" class="button primary">{{ form.submit(class="button primary") }}</a></li>
+										<li><a href="#" class="button primary">{{ form.submit(class="button primary") }}</a></li> 
 									</ul>
 									<div>
 										{% if file_url %}
@@ -70,6 +71,12 @@
 										<li><p> Detected license plate : <b>{{ display_lpResult }}</b>
 											<br> Owner : <b>{{ display_oResult }}</b>
 											<br> Information : <b>{{ display_iResult }}</b>
+											
+											
+											<div class="alert">
+												<span class="closebtn" id="button primary" onclick="this.parentElement.style.display='none';">&times; </span>
+												New Car Deteced.
+											</div>
 										</p>
 										</li>
 								
@@ -112,8 +119,12 @@
 												ifrm.style.marginTop = "15px";
 												x.appendChild(ifrm);
 											}
+
+		
 										</script>
 									</div>
+							
+									</section>
 								</section>
 							</div>
 						</header>
