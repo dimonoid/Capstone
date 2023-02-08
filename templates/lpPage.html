@@ -11,6 +11,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
 		<noscript><link rel="stylesheet" href="{{url_for('static', filename='css/noscript.css')}}" /></noscript>
+
+		<!--Leaflet JS & CSS-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+		crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+		crossorigin=""></script>
 	</head>
 	<body class="is-preload">
 
@@ -76,7 +84,7 @@
 									</ul>
 								</div>
 								<section>
-									<h3 class="major">GPS Location Data <i>(coming soon)</i></h3>
+									<h3 class="major">GPS Location Data</h3>
 									<!-- Old GPS location code
 									<div class="inner">
 										<ul class="actions">
@@ -90,29 +98,69 @@
 									<div class ="inner">
 										<button onclick="getLocation()">Get Location</button>
 										<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+									
+										<div id="map" style="height:480px;"></div> 
+
 										<script>
 											var x = document.getElementById("geoLocationResult");
 	
 											function getLocation() {
-											if (navigator.geolocation) {
-												navigator.geolocation.getCurrentPosition(showPosition);
-											} else { 
-												x.innerHTML = "Geolocation is not supported by this browser.";
-											}
+												if (navigator.geolocation) {
+													navigator.geolocation.getCurrentPosition(showPosition);
+												} else { 
+													x.innerHTML = "Geolocation is not supported by this browser.";
+												}
 											}
 	
 											function showPosition(position) {
-												x.innerHTML = "<b>Latitude:</b> " + position.coords.latitude + ", <b>Longitude:</b> " + position.coords.longitude + "<br>" ;
+												//Obtain current [longitude, latitude] from API
+												var currentLong = position.coords.longitude;
+												var currentLat = position.coords.latitude;
 
-												var ifrm = document.createElement("iframe");
+												x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>" ;
+								
+												//Javascript for the Leaflet map
+												var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
+												L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+													maxZoom: 19,
+													attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+												}).addTo(map)
+												
+												var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
+													.bindPopup('Current location.')
+													.openPopup();
 
-												ifrm.setAttribute("src", "https://www.google.com/maps/embed/v1/place?key=AIzaSyCN_6OemnEnQjUG0JJVt8dMNpuWPg9UKMo&q=" + position.coords.latitude + ","+ position.coords.longitude)
-												ifrm.style.width = "640px";
-												ifrm.style.height = "480px";
-												ifrm.style.marginTop = "15px";
-												x.appendChild(ifrm);
+
+												//Creating dummy markers/events on the map
+
+												//45.390731, -75.744219
+												var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
+													.bindPopup('Stolen car.')
+
+												//45.428816, -75.691114
+												var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
+													.bindPopup('Theft.')
+
+												//45.417656, -75.690743
+												var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
+													.bindPopup('Assault.')
+
+												//45.423235, -75.677401
+												var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
+													.bindPopup('Stolen car.')
+												
+												//45.420499, -75.673602
+												var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
+													.bindPopup('Parking violation.')
+
+
+
+
 											}
 										</script>
+									</div>
+
+									<div class="inner">
 									</div>
 								</section>
 							</div>
