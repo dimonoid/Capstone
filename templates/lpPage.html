@@ -84,15 +84,17 @@
 									</ul>
 								</div>
 								<section>
-									<h3 class="major">GPS Location Data</h3>
+									<h3 class="major">Crime Map</h3>
 									<div class ="inner">
 										<button onclick="getLocation()">Get Location</button>
 										<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+										<p id="geoLocationAddress" style="margin-left: 15px;"></p>
 									
 										<div id="map" style="height:480px;"></div> 
 
 										<script>
 											var x = document.getElementById("geoLocationResult");
+											var y = document.getElementById("geoLocationAddress");
 	
 											function getLocation() {
 												if (navigator.geolocation) {
@@ -106,6 +108,26 @@
 												//Obtain current [longitude, latitude] from API
 												var currentLong = position.coords.longitude;
 												var currentLat = position.coords.latitude;
+												
+												//Reverse Geocoding (Coords --> Address)
+												var requestOptions = {
+													method: 'GET',
+												};
+
+												var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon='+ currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
+
+												fetch(reverseString).then(result => result.json())
+												.then(featureCollection => {
+													if (featureCollection.features.length === 0) {
+														document.getElementById("status").textContent = "The address is not found";
+														return;
+													}
+													const foundAddress = featureCollection.features[0];
+													console.log(foundAddress.properties);
+													console.log(foundAddress.properties.address_line1);
+													y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
+												});
+												
 
 												x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>" ;
 								
@@ -125,7 +147,7 @@
 
 												//45.390731, -75.744219
 												var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
-													.bindPopup('Stolen car.')
+													.bindPopup('Theft.')
 
 												//45.428816, -75.691114
 												var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
@@ -137,7 +159,7 @@
 
 												//45.423235, -75.677401
 												var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
-													.bindPopup('Stolen car.')
+													.bindPopup('Emergency.')
 												
 												//45.420499, -75.673602
 												var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
@@ -147,18 +169,58 @@
 									</div>
 								</section>
 							</div>
+							<!-- Potential future feature (List of active incidents)
+
+							<div class="inner">
+								<br><br>
+								<h3 class="major">Active incidents</h3>
+								<table>
+									<tr>
+									  <th>Incident</th>
+									  <th>Location</th>
+									  <th>Status</th>
+									</tr>
+									
+									<tr>
+									  <td>Theft</td>
+									  <td>[45.390731, -75.744219]</td>
+									  <td></td>
+									</tr>
+									<tr>
+									  <td>Centro comercial Moctezuma</td>
+									  <td>Francisco Chang</td>
+									  <td>Officer at location</td>
+									</tr>
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>  
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>
+								  </table>
+							</div>
 						</header>
-
-						<!-- Content -->
-							
-
 					</section>
+					-->
+
+
 
 				<!-- Footer -->
 					<section id="footer">
 					</section>
-
 			</div>
+
+
+
 
 		<!-- Scripts -->
 			<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
