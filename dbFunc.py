@@ -62,23 +62,23 @@ def compare_face(str):
 
 
 # add License Plate to database
-def add_plate(LicensePlate, Owner, Info):
+def add_plate(LicensePlate, Owner, Info, Colour):
     try:
         con = sql.connect('Database.db')
         c = con.cursor()
         c.execute(
-            "INSERT INTO LicensePlate (LicensePlate, Owner, Info) VALUES (%s, %s, %s)" % (LicensePlate, Owner, Info))
+            "INSERT INTO LicensePlate (LicensePlate, Owner, Info, Colour) VALUES (%s, %s, %s, %s)" % (LicensePlate, Owner, Info, Colour))
         con.commit()
     except:
         print("Error adding plate to db")
 
 
 # add Face to database
-def add_face(Name, Crime):
+def add_face(Name, Crime, Colour):
     try:
         con = sql.connect('Database.db')
         c = con.cursor()
-        c.execute("INSERT INTO Criminals (Name, Crime) VALUES (%b, %s, %s)" % (Name, Crime))  # TODO
+        c.execute("INSERT INTO Criminals (Name, Crime, Colour) VALUES (%s, %s, %s)" % (Name, Crime, Colour))
         con.commit()
     except:
         print("Error adding face to db")
