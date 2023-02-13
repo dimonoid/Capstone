@@ -11,6 +11,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
 		<noscript><link rel="stylesheet" href="{{url_for('static', filename='css/noscript.css')}}" /></noscript>
+
+		<!--Leaflet JS & CSS-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+		crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+		crossorigin=""></script>
 	</head>
 	<body class="is-preload">
 
@@ -83,41 +91,86 @@
 									</ul>
 								</div>
 								<section>
-									<h3 class="major">GPS Location Data <i>(coming soon)</i></h3>
-									<!-- Old GPS location code
-									<div class="inner">
-										<ul class="actions">
-											<li><p> Location : <b>{{ displayGpsResult }}</b></p></li>
-										</ul>
-										<form>
-											<a href=# id=test><button class='btn btn-default'>Test</button></a>
-										</form>
-									</div>
-									!-->
+									<h3 class="major">Crime Map</h3>
 									<div class ="inner">
 										<button onclick="getLocation()">Get Location</button>
 										<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+										<p id="geoLocationAddress" style="margin-left: 15px;"></p>
+									
+										<div id="map" style="height:480px;"></div> 
+
 										<script>
 											var x = document.getElementById("geoLocationResult");
+											var y = document.getElementById("geoLocationAddress");
 	
 											function getLocation() {
-											if (navigator.geolocation) {
-												navigator.geolocation.getCurrentPosition(showPosition);
-											} else { 
-												x.innerHTML = "Geolocation is not supported by this browser.";
-											}
+												if (navigator.geolocation) {
+													navigator.geolocation.getCurrentPosition(showPosition);
+												} else { 
+													x.innerHTML = "Geolocation is not supported by this browser.";
+												}
 											}
 	
 											function showPosition(position) {
-												x.innerHTML = "<b>Latitude:</b> " + position.coords.latitude + ", <b>Longitude:</b> " + position.coords.longitude + "<br>" ;
+												//Obtain current [longitude, latitude] from API
+												var currentLong = position.coords.longitude;
+												var currentLat = position.coords.latitude;
+												
+												//Reverse Geocoding (Coords --> Address)
+												var requestOptions = {
+													method: 'GET',
+												};
 
-												var ifrm = document.createElement("iframe");
+												var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon='+ currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
 
-												ifrm.setAttribute("src", "https://www.google.com/maps/embed/v1/place?key=AIzaSyCN_6OemnEnQjUG0JJVt8dMNpuWPg9UKMo&q=" + position.coords.latitude + ","+ position.coords.longitude)
-												ifrm.style.width = "640px";
-												ifrm.style.height = "480px";
-												ifrm.style.marginTop = "15px";
-												x.appendChild(ifrm);
+												fetch(reverseString).then(result => result.json())
+												.then(featureCollection => {
+													if (featureCollection.features.length === 0) {
+														document.getElementById("status").textContent = "The address is not found";
+														return;
+													}
+													const foundAddress = featureCollection.features[0];
+													console.log(foundAddress.properties);
+													console.log(foundAddress.properties.address_line1);
+													y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
+												});
+												
+
+												x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>" ;
+								
+												//Javascript for the Leaflet map
+												var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
+												L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+													maxZoom: 19,
+													attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+												}).addTo(map)
+												
+												var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
+													.bindPopup('Current location.')
+													.openPopup();
+
+
+												//Creating dummy markers/events on the map
+
+												//45.390731, -75.744219
+												var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
+													.bindPopup('Theft.')
+
+												//45.428816, -75.691114
+												var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
+													.bindPopup('Theft.')
+
+												//45.417656, -75.690743
+												var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
+													.bindPopup('Assault.')
+
+												//45.423235, -75.677401
+												var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
+													.bindPopup('Emergency.')
+												
+												//45.420499, -75.673602
+												var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
+													.bindPopup('Parking violation.')
 											}
 
 		
@@ -127,18 +180,58 @@
 									</section>
 								</section>
 							</div>
+							<!-- Potential future feature (List of active incidents)
+
+							<div class="inner">
+								<br><br>
+								<h3 class="major">Active incidents</h3>
+								<table>
+									<tr>
+									  <th>Incident</th>
+									  <th>Location</th>
+									  <th>Status</th>
+									</tr>
+									
+									<tr>
+									  <td>Theft</td>
+									  <td>[45.390731, -75.744219]</td>
+									  <td></td>
+									</tr>
+									<tr>
+									  <td>Centro comercial Moctezuma</td>
+									  <td>Francisco Chang</td>
+									  <td>Officer at location</td>
+									</tr>
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>  
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>
+								  </table>
+							</div>
 						</header>
-
-						<!-- Content -->
-							
-
 					</section>
+					-->
+
+
 
 				<!-- Footer -->
 					<section id="footer">
 					</section>
-
 			</div>
+
+
+
 
 		<!-- Scripts -->
 			<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
