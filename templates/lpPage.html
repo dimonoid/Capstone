@@ -63,7 +63,7 @@
 									{% endfor %}
 									<ul class="actions fit">
 										<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
-										<li><a href="#" class="button primary">{{ form.submit(class="button primary") }}</a></li>
+										<li><a href="#" id = "pbutton" class="button primary">{{ form.submit(class="button primary") }}</a></li>
 									</ul>
 									<div>
 										{% if file_url %}
@@ -75,9 +75,67 @@
 								</form>
 								<div class="inner">
 									<ul class="actions">
+										
 										<li><p> Detected license plate : <b>{{ display_lpResult }}</b>
 											<br> Owner : <b>{{ display_oResult }}</b>
 											<br> Information : <b>{{ display_iResult }}</b>
+											<br> Threat: <b> {{display_cResult}}</b>
+
+				
+											<style>
+											.alert {
+  												padding: 20px;
+												color: white;
+												background-color: black;
+												margin-bottom: 15px;
+											}
+
+											
+											.closebtn {
+											margin-left: 15px;
+											color: white;
+											font-weight: bold;
+											float: right;
+											font-size: 22px;
+											line-height: 20px;
+											cursor: pointer;
+											transition: 0.3s;
+											}
+
+											/*.closebtn:hover {
+											color: black;
+											}*/
+											/*<span id = "closedbtn" class="closebtn" onclick="this.parentElement.style.display='none';">&times; </span>
+												New Car Detected.*/
+
+											</style>
+											
+											
+											
+											<div class="alert" id="color"> 
+												
+												
+												<button onclick = "getAlerts()"> Severity </button>
+												<script>
+													function getAlerts(display_cResult){
+														console.log(display_cResult);
+														if (display_cResult == "RED"){
+
+															document.getElementById("color").style.backgroundColor = "red";
+														}
+														else if (display_cResult == "YELLOW"){
+															
+															document.getElementById("color").style.backgroundColor = "yellow";
+														}
+														/*else{
+															document.getElementById("color").style.backgroundColor = "green";
+														}*/
+													}
+												
+													
+													
+												</script>
+											</div>
 										</p>
 										</li>
 								

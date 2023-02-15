@@ -40,6 +40,7 @@ percent_accuracy = None
 display_lpResult = ""
 display_oResult = ""
 display_iResult = ""
+display_cResult = ""
 
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
@@ -158,12 +159,15 @@ def lpPage():
         print(type(dbQuery))
         global display_oResult
         global display_iResult
+        global display_cResult
         if dbQuery is None:
             display_oResult = "Not Found"
             display_iResult = "Not Found"
+            display_cResult = "Not Found"
         else:
             display_oResult = dbQuery['Owner']
             display_iResult = dbQuery['Info']
+            display_cResult = dbQuery['Colour']
 
 
         # Close connection to database
@@ -173,7 +177,8 @@ def lpPage():
     else:
         file_url = None
     return render_template('lpPage.html', displayGpsResult=displayL(), form=form, file_url=file_url,
-                           display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult)
+                           display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult,
+                           display_cResult=display_cResult)
 
 
 @app.route('/fPage', methods=['GET', 'POST'])
