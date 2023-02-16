@@ -83,12 +83,12 @@
 
 				
 											<style>
-											/*.alert {
+											.alert {
   												padding: 20px;
 												color: white;
 												background-color: black;
 												margin-bottom: 15px;
-											}*/
+											}
 
 											
 											.closebtn {
@@ -102,17 +102,20 @@
 											transition: 0.3s;
 											}
 
-											/*.closebtn:hover {
+											.closebtn:hover {
 											color: black;
-											}*/
-											/*<span id = "closedbtn" class="closebtn" onclick="this.parentElement.style.display='none';">&times; </span>
-												New Car Detected.*/
+											}
 
 											</style>
+									
+
+									
 											
 											
 											
 											<div class="alert" id="color"> 
+												<span id = "closedbtn" class="closebtn" onclick="this.parentElement.style.display='none';">&times; </span>
+												New Car Detected.
 												
 												
 												<!-- <button onclick = "getAlerts()"> Severity </button> -->
@@ -136,6 +139,18 @@
 														let a;
 														 a = document.getElementById("cresult");
 														console.log(a);
+														if (display_cResult == "red"){
+															document.getElementById("color").style.backgroundColor = "red";
+														}
+														else if (display_cResult == "yellow"){
+															document.getElementById("color").style.backgroundColor = "yellow";
+														}
+														else{
+															document.getElementById("color").style.backgroundColor = "green";
+														}
+
+
+															
 													}
 												
 													
