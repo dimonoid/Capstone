@@ -83,12 +83,12 @@
 
 				
 											<style>
-											.alert {
+											/*.alert {
   												padding: 20px;
 												color: white;
 												background-color: black;
 												margin-bottom: 15px;
-											}
+											}*/
 
 											
 											.closebtn {
@@ -115,9 +115,9 @@
 											<div class="alert" id="color"> 
 												
 												
-												<button onclick = "getAlerts()"> Severity </button>
+												<!-- <button onclick = "getAlerts()"> Severity </button> -->
 												<script>
-													function getAlerts(display_cResult){
+													/*function getAlerts(display_cResult){
 														console.log(display_cResult);
 														if (display_cResult == "RED"){
 
@@ -127,9 +127,14 @@
 															
 															document.getElementById("color").style.backgroundColor = "yellow";
 														}
-														/*else{
+														else{
 															document.getElementById("color").style.backgroundColor = "green";
-														}*/
+														}
+													} */
+
+													document.getElementById("pbutton").onclick = function(){
+														alert("yo")
+														console.log(display_cResult);
 													}
 												
 													
