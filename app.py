@@ -176,9 +176,11 @@ def lpPage():
         print("Uploaded file: " + filename)  ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
+    my_string = ""
     return render_template('lpPage.html', displayGpsResult=displayL(), form=form, file_url=file_url,
                            display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult,
-                           display_cResult=display_cResult)
+                           display_cResult=display_cResult,
+                            my_string=display_cResult)
 
 
 @app.route('/fPage', methods=['GET', 'POST'])

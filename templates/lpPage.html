@@ -86,7 +86,7 @@
 											.alert {
   												padding: 20px;
 												color: white;
-												background-color: black;
+												/*background-color: black;*/
 												margin-bottom: 15px;
 											}
 
@@ -103,7 +103,7 @@
 											}
 
 											.closebtn:hover {
-											color: black;
+											color: rgb(0, 0, 0);
 											}
 
 											</style>
@@ -113,7 +113,7 @@
 											
 											
 											
-											<div class="alert" id="color"> 
+											<div class="alert" id="1748"> 
 												<span id = "closedbtn" class="closebtn" onclick="this.parentElement.style.display='none';">&times; </span>
 												New Car Detected.
 												
@@ -136,20 +136,19 @@
 													} */
 
 													document.getElementById("pbutton").onclick = function(){
-														let a;
-														 a = document.getElementById("cresult");
-														console.log(a);
-														if (display_cResult == "red"){
-															document.getElementById("color").style.backgroundColor = "red";
+
+														
+														
+														
+														if (b == "red"){
+															document.getElementById("1748").style.backgroundColor = 'red';
 														}
-														else if (display_cResult == "yellow"){
-															document.getElementById("color").style.backgroundColor = "yellow";
+														else if (b == "yellow"){
+															document.getElementById("1748").style.backgroundColor = 'yellow';
 														}
 														else{
-															document.getElementById("color").style.backgroundColor = "green";
+															document.getElementById("1748").style.backgroundColor = 'green';
 														}
-
-
 															
 													}
 												
@@ -320,6 +319,10 @@
             return false;
          		 });
        			 });
+			</script>
+			<script>
+				var b = "{{my_string}}";
+				
 			</script>
 	</body>
 </html>
