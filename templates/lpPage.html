@@ -85,14 +85,11 @@
 									<br> Information : <b>{{ display_iResult }}</b>
 									<br> Threat: <b id="cresult"> {{display_cResult}}</b>
 
-
+									<!-- Style for alerts -->
 									<style>
 										.alert {
 											display: none;
-											/*padding: 20px;
-												color: white;
-												background-color: black;
-												margin-bottom: 15px;*/
+											
 										}
 
 
@@ -111,71 +108,14 @@
 											color: rgb(0, 0, 0);
 										}
 									</style>
-
-
-
-
-
-
+									<!-- HTML for alerts-->
 								<div class="alert" id="1748">
 									<span id="closedbtn" class="closebtn"
 										onclick="this.parentElement.style.display='none';">&times; </span>
 									New Car Detected.
-
-
-									<!-- <button onclick = "getAlerts()"> Severity </button> -->
-									<script>
-										/*function getAlerts(display_cResult){
-											console.log(display_cResult);
-											if (display_cResult == "RED"){
-
-												document.getElementById("color").style.backgroundColor = "red";
-											}
-											else if (display_cResult == "YELLOW"){
-												
-												document.getElementById("color").style.backgroundColor = "yellow";
-											}
-											else{
-												document.getElementById("color").style.backgroundColor = "green";
-											}
-										} */
-
-										/*document.getElementById("pbutton").onclick = function () {
-
-
-
-
-											if (b == "red") {
-												document.getElementById("1748").style.backgroundColor = 'red';
-												document.getElementById("1748").style.padding = '20px';
-												document.getElementById("1748").style.color = 'white';
-												document.getElementById("1748").style.marginBottom = '15px';
-												$('.alert').show();
-											}
-											else if (b == "yellow") {
-												document.getElementById("1748").style.backgroundColor = 'yellow';
-												document.getElementById("1748").style.padding = '20px';
-												document.getElementById("1748").style.color = 'white';
-												document.getElementById("1748").style.marginBottom = '15px';
-												$('.alert').show();
-											}
-											else {
-												document.getElementById("1748").style.backgroundColor = 'green';
-												document.getElementById("1748").style.padding = '20px';
-												document.getElementById("1748").style.color = 'white';
-												document.getElementById("1748").style.marginBottom = '15px';
-												$('.alert').show();
-											}
-
-										}*/
-
-
-
-									</script>
 								</div>
 								</p>
 							</li>
-
 						</ul>
 					</div>
 					<section>
@@ -337,7 +277,9 @@
          		 });
        			 });
 			</script>
+	<!--Javascript for alerts-->		
 	<script>
+		
 		var b = "{{my_string}}";
 		if (b == "red") {
 			document.getElementById("1748").style.backgroundColor = 'red';
@@ -353,13 +295,14 @@
 			document.getElementById("1748").style.marginBottom = '15px';
 			$('.alert').show();
 		}
-		if (b == 'green') {
+		if (b == null) {
 			document.getElementById("1748").style.backgroundColor = 'green';
 			document.getElementById("1748").style.padding = '20px';
 			document.getElementById("1748").style.color = 'black';
 			document.getElementById("1748").style.marginBottom = '15px';
 			$('.alert').show();
 		}
+		
 
 	</script>
 </body>
