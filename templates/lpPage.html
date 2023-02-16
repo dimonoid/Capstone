@@ -5,93 +5,98 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html>
-	<head>
-		<title>LP Page</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
-		<noscript><link rel="stylesheet" href="{{url_for('static', filename='css/noscript.css')}}" /></noscript>
 
-		<!--Leaflet JS & CSS-->
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-		crossorigin=""/>
-		<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-		crossorigin=""></script>
-	</head>
-	<body class="is-preload">
+<head>
+	<title>LP Page</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
+	<noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='css/noscript.css')}}" />
+	</noscript>
 
-		<!-- Page Wrapper -->
-			<div id="page-wrapper">
+	<!--Leaflet JS & CSS-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+</head>
 
-				<!-- Header -->
-					<header id="header">
-						<h1><a href="{{ url_for('index') }}">CrimaVision</a></h1>
-						<nav>
-							<a href="#menu">Menu</a>
-						</nav>
-					</header>
+<body class="is-preload">
 
-				<!-- Menu -->
-					<nav id="menu">
-						<div class="inner">
-							<h2>Menu</h2>
-							<ul class="links">
-								<li><a href="{{ url_for('index') }}">Home</a></li>
-								<li><a href="{{ url_for('lpPage') }}">License Plate Recognition</a></li>
-								<li><a href="{{ url_for('fPage') }}">Facial Recognition</a></li>
-								<li><a href="#">Log In</a></li>
-								<li><a href="#">Sign Up</a></li>
-							</ul>
-							<a href="#" class="close">Close</a>
+	<!-- Page Wrapper -->
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<h1><a href="{{ url_for('index') }}">CrimaVision</a></h1>
+			<nav>
+				<a href="#menu">Menu</a>
+			</nav>
+		</header>
+
+		<!-- Menu -->
+		<nav id="menu">
+			<div class="inner">
+				<h2>Menu</h2>
+				<ul class="links">
+					<li><a href="{{ url_for('index') }}">Home</a></li>
+					<li><a href="{{ url_for('lpPage') }}">License Plate Recognition</a></li>
+					<li><a href="{{ url_for('fPage') }}">Facial Recognition</a></li>
+					<li><a href="#">Log In</a></li>
+					<li><a href="#">Sign Up</a></li>
+				</ul>
+				<a href="#" class="close">Close</a>
+			</div>
+		</nav>
+
+		<!-- Wrapper -->
+		<section id="wrapper">
+			<header>
+				<div class="inner">
+					<h2>License Plate Detection</h2>
+					<input type="file" accept="image/*" name="image" id="file" style="display: none">
+					<label for="file">Upload</label>
+					<form method="post" enctype="multipart/form-data">
+						{{ form.hidden_tag() }}
+
+						{% for error in form.photo.errors %}
+						<span style="color: red;">{{ error }}</span>
+						{% endfor %}
+						<ul class="actions fit">
+							<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
+							<li><a href="#" id="pbutton" class="button primary">{{ form.submit(class="button primary")
+									}}</a></li>
+						</ul>
+						<div>
+							{% if file_url %}
+							<div>
+								<img src="{{ file_url }}" style="width: 400px;">
+							</div>
+							{% endif %}
 						</div>
-					</nav>
+					</form>
+					<div class="inner">
+						<ul class="actions">
 
-				<!-- Wrapper -->
-					<section id="wrapper">
-						<header>
-							<div class="inner">
-								<h2>License Plate Detection</h2>
-								<input type="file" accept="image/*" name="image" id="file" style="display: none">
-								<label for="file">Upload</label>
-								<form method = "post" enctype="multipart/form-data">
-									{{ form.hidden_tag() }}
+							<li>
+								<p> Detected license plate : <b>{{ display_lpResult }}</b>
+									<br> Owner : <b>{{ display_oResult }}</b>
+									<br> Information : <b>{{ display_iResult }}</b>
+									<br> Threat: <b id="cresult"> {{display_cResult}}</b>
 
-									{% for error in form.photo.errors %}
-										<span style="color: red;">{{ error }}</span>
-									{% endfor %}
-									<ul class="actions fit">
-										<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
-										<li><a href="#" id = "pbutton" class="button primary">{{ form.submit(class="button primary") }}</a></li>
-									</ul>
-									<div>
-										{% if file_url %}
-											<div>
-												<img src="{{ file_url }}" style="width: 400px;">
-											</div>
-										{% endif %}
-									</div>
-								</form>
-								<div class="inner">
-									<ul class="actions">
-										
-										<li><p> Detected license plate : <b>{{ display_lpResult }}</b>
-											<br> Owner : <b>{{ display_oResult }}</b>
-											<br> Information : <b>{{ display_iResult }}</b>
-											<br> Threat: <b id = "cresult"> {{display_cResult}}</b>
 
-				
-											<style>
-											.alert {
-  												padding: 20px;
+									<style>
+										.alert {
+											display: none;
+											/*padding: 20px;
 												color: white;
-												/*background-color: black;*/
-												margin-bottom: 15px;
-											}
+												background-color: black;
+												margin-bottom: 15px;*/
+										}
 
-											
-											.closebtn {
+
+										.closebtn {
 											margin-left: 15px;
 											color: white;
 											font-weight: bold;
@@ -100,154 +105,166 @@
 											line-height: 20px;
 											cursor: pointer;
 											transition: 0.3s;
-											}
+										}
 
-											.closebtn:hover {
+										.closebtn:hover {
 											color: rgb(0, 0, 0);
+										}
+									</style>
+
+
+
+
+
+
+								<div class="alert" id="1748">
+									<span id="closedbtn" class="closebtn"
+										onclick="this.parentElement.style.display='none';">&times; </span>
+									New Car Detected.
+
+
+									<!-- <button onclick = "getAlerts()"> Severity </button> -->
+									<script>
+										/*function getAlerts(display_cResult){
+											console.log(display_cResult);
+											if (display_cResult == "RED"){
+
+												document.getElementById("color").style.backgroundColor = "red";
+											}
+											else if (display_cResult == "YELLOW"){
+												
+												document.getElementById("color").style.backgroundColor = "yellow";
+											}
+											else{
+												document.getElementById("color").style.backgroundColor = "green";
+											}
+										} */
+
+										/*document.getElementById("pbutton").onclick = function () {
+
+
+
+
+											if (b == "red") {
+												document.getElementById("1748").style.backgroundColor = 'red';
+												document.getElementById("1748").style.padding = '20px';
+												document.getElementById("1748").style.color = 'white';
+												document.getElementById("1748").style.marginBottom = '15px';
+												$('.alert').show();
+											}
+											else if (b == "yellow") {
+												document.getElementById("1748").style.backgroundColor = 'yellow';
+												document.getElementById("1748").style.padding = '20px';
+												document.getElementById("1748").style.color = 'white';
+												document.getElementById("1748").style.marginBottom = '15px';
+												$('.alert').show();
+											}
+											else {
+												document.getElementById("1748").style.backgroundColor = 'green';
+												document.getElementById("1748").style.padding = '20px';
+												document.getElementById("1748").style.color = 'white';
+												document.getElementById("1748").style.marginBottom = '15px';
+												$('.alert').show();
 											}
 
-											</style>
-									
+										}*/
 
-									
-											
-											
-											
-											<div class="alert" id="1748"> 
-												<span id = "closedbtn" class="closebtn" onclick="this.parentElement.style.display='none';">&times; </span>
-												New Car Detected.
-												
-												
-												<!-- <button onclick = "getAlerts()"> Severity </button> -->
-												<script>
-													/*function getAlerts(display_cResult){
-														console.log(display_cResult);
-														if (display_cResult == "RED"){
 
-															document.getElementById("color").style.backgroundColor = "red";
-														}
-														else if (display_cResult == "YELLOW"){
-															
-															document.getElementById("color").style.backgroundColor = "yellow";
-														}
-														else{
-															document.getElementById("color").style.backgroundColor = "green";
-														}
-													} */
 
-													document.getElementById("pbutton").onclick = function(){
-
-														
-														
-														
-														if (b == "red"){
-															document.getElementById("1748").style.backgroundColor = 'red';
-														}
-														else if (b == "yellow"){
-															document.getElementById("1748").style.backgroundColor = 'yellow';
-														}
-														else{
-															document.getElementById("1748").style.backgroundColor = 'green';
-														}
-															
-													}
-												
-													
-													
-												</script>
-											</div>
-										</p>
-										</li>
-								
-									</ul>
+									</script>
 								</div>
-								<section>
-									<h3 class="major">Crime Map</h3>
-									<div class ="inner">
-										<button onclick="getLocation()">Get Location</button>
-										<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
-										<p id="geoLocationAddress" style="margin-left: 15px;"></p>
-									
-										<div id="map" style="height:480px;"></div> 
+								</p>
+							</li>
 
-										<script>
-											var x = document.getElementById("geoLocationResult");
-											var y = document.getElementById("geoLocationAddress");
-	
-											function getLocation() {
-												if (navigator.geolocation) {
-													navigator.geolocation.getCurrentPosition(showPosition);
-												} else { 
-													x.innerHTML = "Geolocation is not supported by this browser.";
-												}
+						</ul>
+					</div>
+					<section>
+						<h3 class="major">Crime Map</h3>
+						<div class="inner">
+							<button onclick="getLocation()">Get Location</button>
+							<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+							<p id="geoLocationAddress" style="margin-left: 15px;"></p>
+
+							<div id="map" style="height:480px;"></div>
+
+							<script>
+								var x = document.getElementById("geoLocationResult");
+								var y = document.getElementById("geoLocationAddress");
+
+								function getLocation() {
+									if (navigator.geolocation) {
+										navigator.geolocation.getCurrentPosition(showPosition);
+									} else {
+										x.innerHTML = "Geolocation is not supported by this browser.";
+									}
+								}
+
+								function showPosition(position) {
+									//Obtain current [longitude, latitude] from API
+									var currentLong = position.coords.longitude;
+									var currentLat = position.coords.latitude;
+
+									//Reverse Geocoding (Coords --> Address)
+									var requestOptions = {
+										method: 'GET',
+									};
+
+									var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon=' + currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
+
+									fetch(reverseString).then(result => result.json())
+										.then(featureCollection => {
+											if (featureCollection.features.length === 0) {
+												document.getElementById("status").textContent = "The address is not found";
+												return;
 											}
-	
-											function showPosition(position) {
-												//Obtain current [longitude, latitude] from API
-												var currentLong = position.coords.longitude;
-												var currentLat = position.coords.latitude;
-												
-												//Reverse Geocoding (Coords --> Address)
-												var requestOptions = {
-													method: 'GET',
-												};
-
-												var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon='+ currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
-
-												fetch(reverseString).then(result => result.json())
-												.then(featureCollection => {
-													if (featureCollection.features.length === 0) {
-														document.getElementById("status").textContent = "The address is not found";
-														return;
-													}
-													const foundAddress = featureCollection.features[0];
-													console.log(foundAddress.properties);
-													console.log(foundAddress.properties.address_line1);
-													y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
-												});
-												
-
-												x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>" ;
-								
-												//Javascript for the Leaflet map
-												var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
-												L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-													maxZoom: 19,
-													attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-												}).addTo(map)
-												
-												var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
-													.bindPopup('Current location.')
-													.openPopup();
+											const foundAddress = featureCollection.features[0];
+											console.log(foundAddress.properties);
+											console.log(foundAddress.properties.address_line1);
+											y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
+										});
 
 
-												//Creating dummy markers/events on the map
+									x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>";
 
-												//45.390731, -75.744219
-												var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
-													.bindPopup('Theft.')
+									//Javascript for the Leaflet map
+									var map = L.map('map', { center: [currentLat, currentLong], zoom: 19 });
+									L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+										maxZoom: 19,
+										attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+									}).addTo(map)
 
-												//45.428816, -75.691114
-												var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
-													.bindPopup('Theft.')
+									var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
+										.bindPopup('Current location.')
+										.openPopup();
 
-												//45.417656, -75.690743
-												var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
-													.bindPopup('Assault.')
 
-												//45.423235, -75.677401
-												var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
-													.bindPopup('Emergency.')
-												
-												//45.420499, -75.673602
-												var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
-													.bindPopup('Parking violation.')
-											}
-										</script>
-									</div>
-								</section>
-							</div>
-							<!-- Potential future feature (List of active incidents)
+									//Creating dummy markers/events on the map
+
+									//45.390731, -75.744219
+									var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
+										.bindPopup('Theft.')
+
+									//45.428816, -75.691114
+									var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
+										.bindPopup('Theft.')
+
+									//45.417656, -75.690743
+									var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
+										.bindPopup('Assault.')
+
+									//45.423235, -75.677401
+									var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
+										.bindPopup('Emergency.')
+
+									//45.420499, -75.673602
+									var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
+										.bindPopup('Parking violation.')
+								}
+							</script>
+						</div>
+					</section>
+				</div>
+				<!-- Potential future feature (List of active incidents)
 
 							<div class="inner">
 								<br><br>
@@ -293,22 +310,22 @@
 
 
 				<!-- Footer -->
-					<section id="footer">
-					</section>
-			</div>
+				<section id="footer">
+				</section>
+	</div>
 
 
 
 
-		<!-- Scripts -->
-			<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-			<script src="{{url_for('static', filename='js/jquery.scrollex.min.js')}}"></script>
-			<script src="{{url_for('static', filename='js/browser.min.js')}}"></script>
-			<script src="{{url_for('static', filename='js/breakpoints.min.js')}}"></script>
-			<script src="{{url_for('static', filename='js/util.js')}}"></script>
-			<script src="{{url_for('static', filename='js/main.js')}}"></script>
-			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-			<script type=text/javascript>
+	<!-- Scripts -->
+	<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/jquery.scrollex.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/browser.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/breakpoints.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/util.js')}}"></script>
+	<script src="{{url_for('static', filename='js/main.js')}}"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type=text/javascript>
       		  $(function() {
          		 $('a#test').on('click', function(e) {
            			 e.preventDefault()
@@ -320,9 +337,31 @@
          		 });
        			 });
 			</script>
-			<script>
-				var b = "{{my_string}}";
-				
-			</script>
-	</body>
+	<script>
+		var b = "{{my_string}}";
+		if (b == "red") {
+			document.getElementById("1748").style.backgroundColor = 'red';
+			document.getElementById("1748").style.padding = '20px';
+			document.getElementById("1748").style.color = 'black';
+			document.getElementById("1748").style.marginBottom = '15px';
+			$('.alert').show();
+		}
+		if (b == "yellow") {
+			document.getElementById("1748").style.backgroundColor = 'yellow';
+			document.getElementById("1748").style.padding = '20px';
+			document.getElementById("1748").style.color = 'black';
+			document.getElementById("1748").style.marginBottom = '15px';
+			$('.alert').show();
+		}
+		if (b == 'green') {
+			document.getElementById("1748").style.backgroundColor = 'green';
+			document.getElementById("1748").style.padding = '20px';
+			document.getElementById("1748").style.color = 'black';
+			document.getElementById("1748").style.marginBottom = '15px';
+			$('.alert').show();
+		}
+
+	</script>
+</body>
+
 </html>
