@@ -8,6 +8,7 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
+from threading import Thread
 
 from ALPR import *
 from currentLocation import *
@@ -171,7 +172,8 @@ def lpPage():
             display_iResult = dbQuery['Info']
             display_cResult = dbQuery['Colour']
             if(display_cResult == "red"):
-                    buzz_for_5_seconds()
+                    t = Thread(target=buzz_for_5_seconds)
+                    t.start()
             
 
 
