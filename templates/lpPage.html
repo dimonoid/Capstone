@@ -79,7 +79,7 @@
 										<li><p> Detected license plate : <b>{{ display_lpResult }}</b>
 											<br> Owner : <b>{{ display_oResult }}</b>
 											<br> Information : <b>{{ display_iResult }}</b>
-											<br> Threat: <b> {{display_cResult}}</b>
+											<br> Threat: <b id = "cresult"> {{display_cResult}}</b>
 
 				
 											<style>
@@ -133,8 +133,9 @@
 													} */
 
 													document.getElementById("pbutton").onclick = function(){
-														alert("yo")
-														console.log(display_cResult);
+														let a;
+														 a = document.getElementById("cresult");
+														console.log(a);
 													}
 												
 													
