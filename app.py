@@ -1,5 +1,5 @@
 import glob
-import RPi.GPIO as GPIO # Uncomment when running on the pi
+#import RPi.GPIO as GPIO # Uncomment when running on the pi
 import time
 
 import face_recognition
@@ -171,9 +171,9 @@ def lpPage():
             display_oResult = dbQuery['Owner']
             display_iResult = dbQuery['Info']
             display_cResult = dbQuery['Colour']
-            if(display_cResult == "red"):
-                    t = Thread(target=buzz_for_5_seconds)
-                    t.start()
+            #if(display_cResult == "red"):
+            #        t = Thread(target=buzz_for_5_seconds)
+            #        t.start()
             
 
 

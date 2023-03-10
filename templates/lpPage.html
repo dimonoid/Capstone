@@ -54,8 +54,15 @@
 		<section id="wrapper">
 			<header>
 				<div class="inner">
-					<h2>License Plate Detection</h2>
-					<input type="file" accept="image/*" name="image" id="file" style="display: none">
+					<div class="inner">
+						<h2>Live Camera Feed</h2>
+						<!-- <h2 class="mt-5">Live Stream</h2> -->
+						<img src="{{ url_for('video_feed') }}"
+						width = "500"
+						height = "300">
+						
+					</div>
+					<!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
 					<label for="file">Upload</label>
 					<form method="post" enctype="multipart/form-data">
 						{{ form.hidden_tag() }}
@@ -75,15 +82,15 @@
 							</div>
 							{% endif %}
 						</div>
-					</form>
+					</form> -->
 					<div class="inner">
 						<ul class="actions">
 
 							<li>
-								<p> Detected license plate : <b>{{ display_lpResult }}</b>
+								<!-- <p> Detected license plate : <b>{{ display_lpResult }}</b>
 									<br> Owner : <b>{{ display_oResult }}</b>
 									<br> Information : <b>{{ display_iResult }}</b>
-									<br> Threat: <b id="cresult"> {{display_cResult}}</b>
+									<br> Threat: <b id="cresult"> {{display_cResult}}</b> -->
 
 									<!-- Style for alerts -->
 									<style>
@@ -128,7 +135,7 @@
 					<section>
 						<h3 class="major">Crime Map</h3>
 						<div class="inner">
-							<button onclick="getLocation()">Get Location</button>
+							<button onclick="getLocation()">Update Location</button>
 							<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
 							<p id="geoLocationAddress" style="margin-left: 15px;"></p>
 
