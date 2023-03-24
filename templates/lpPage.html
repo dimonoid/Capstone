@@ -86,6 +86,7 @@
 					<div class="inner">
 						<ul class="actions">
 
+<<<<<<< HEAD
 							<li>
 								<!-- <p> Detected license plate : <b>{{ display_lpResult }}</b>
 									<br> Owner : <b>{{ display_oResult }}</b>
@@ -219,6 +220,160 @@
 					</section>
 				</div>
 				<!-- Potential future feature (List of active incidents)
+=======
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>License Plate Detection</h2>
+								<input type="file" accept="image/*" name="image" id="file" style="display: none">
+								<label for="file">Upload</label>
+								
+								<form method = "post" enctype="multipart/form-data">
+									{{ form.hidden_tag() }}
+
+									{% for error in form.photo.errors %}
+										<span style="color: red;">{{ error }}</span>
+									{% endfor %}
+									<ul class="actions fit">
+										<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
+										<li><a href="#" class="button primary">{{ form.submit(class="button primary") }}</a></li> 
+									</ul>
+									<div>
+										{% if file_url %}
+											<div>
+												<img src="{{ file_url }}" style="width: 400px;">
+											</div>
+										{% endif %}
+									</div>
+								</form>
+								<div class="inner">
+									<ul class="actions">
+										<li><p> Detected license plate : <b>{{ display_lpResult }}</b>
+											<br> Owner : <b>{{ display_oResult }}</b>
+											<br> Information : <b>{{ display_iResult }}</b>
+											
+											
+											<div class="alert">
+												<span class="closebtn" id="button primary" onclick="this.parentElement.style.display='none';">&times; </span>
+												New Car Deteced.
+											</div>
+										</p>
+										</li>
+								
+									</ul>
+								</div>
+								
+								<!--Spacing-->
+											<br><br>
+											
+											<div class="add action">
+											<form action="insert_data.php" method="post" enctype="multipart/form-data">
+												<label for="LicensePlate">License Plate Number:</label>
+												<input type="text" id="LicensePlate" name="LicensePlate">
+												<label for="Owner">Owner:</label>
+												<input type="text" id="Owner" name="Owner">
+												<label for="Info">Info:</label>
+												<input type="text" id="Info" name="Info">
+												<label for="Colour">Colour:</label>
+												<input type="text" id="Colour" name="Colour">
+												<br>
+												<input id="insert_data" id="insert_data" type="submit" value="Send to Database">
+											</form>
+											</div>
+								
+								<section>
+									<h3 class="major">Crime Map</h3>
+									<div class ="inner">
+										<button onclick="getLocation()">Get Location</button>
+										<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+										<p id="geoLocationAddress" style="margin-left: 15px;"></p>
+									
+										<div id="map" style="height:480px;"></div> 
+
+										<script>
+											var x = document.getElementById("geoLocationResult");
+											var y = document.getElementById("geoLocationAddress");
+	
+											function getLocation() {
+												if (navigator.geolocation) {
+													navigator.geolocation.getCurrentPosition(showPosition);
+												} else { 
+													x.innerHTML = "Geolocation is not supported by this browser.";
+												}
+											}
+	
+											function showPosition(position) {
+												//Obtain current [longitude, latitude] from API
+												var currentLong = position.coords.longitude;
+												var currentLat = position.coords.latitude;
+												
+												//Reverse Geocoding (Coords --> Address)
+												var requestOptions = {
+													method: 'GET',
+												};
+
+												var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon='+ currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
+
+												fetch(reverseString).then(result => result.json())
+												.then(featureCollection => {
+													if (featureCollection.features.length === 0) {
+														document.getElementById("status").textContent = "The address is not found";
+														return;
+													}
+													const foundAddress = featureCollection.features[0];
+													console.log(foundAddress.properties);
+													console.log(foundAddress.properties.address_line1);
+													y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
+												});
+												
+
+												x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>" ;
+								
+												//Javascript for the Leaflet map
+												var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
+												L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+													maxZoom: 19,
+													attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+												}).addTo(map)
+												
+												var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
+													.bindPopup('Current location.')
+													.openPopup();
+
+
+												//Creating dummy markers/events on the map
+
+												//45.390731, -75.744219
+												var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
+													.bindPopup('Parking Violation.')
+
+												//45.428816, -75.691114
+												var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
+													.bindPopup('Vehicle Stolen.')
+
+												//45.417656, -75.690743
+												var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
+													.bindPopup('Candy Theft.')
+
+												//45.423235, -75.677401
+												var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
+													.bindPopup('Speeding Violation.')
+												
+												//45.420499, -75.673602
+												var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
+													.bindPopup('Kidnapping.')
+											}
+
+		
+										</script>
+									</div>
+							
+									</section>
+								</section>
+							</div>
+							<!-- Potential future feature (List of active incidents)
+>>>>>>> 6f47884277ba90910bb1d4f6913562a6a7165223
 
 							<div class="inner">
 								<br><br>
