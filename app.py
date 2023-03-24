@@ -1,4 +1,6 @@
 import glob
+#import RPi.GPIO as GPIO # Uncomment when running on the pi
+import time
 
 import face_recognition
 from flask import send_from_directory
@@ -6,6 +8,7 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
+from threading import Thread
 
 from ALPR import *
 from currentLocation import *
@@ -40,6 +43,7 @@ percent_accuracy = None
 display_lpResult = ""
 display_oResult = ""
 display_iResult = ""
+display_cResult = ""
 
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
@@ -158,12 +162,19 @@ def lpPage():
         print(type(dbQuery))
         global display_oResult
         global display_iResult
+        global display_cResult
         if dbQuery is None:
             display_oResult = "Not Found"
             display_iResult = "Not Found"
+            display_cResult = "Not Found"
         else:
             display_oResult = dbQuery['Owner']
             display_iResult = dbQuery['Info']
+            display_cResult = dbQuery['Colour']
+            #if(display_cResult == "red"):
+            #        t = Thread(target=buzz_for_5_seconds)
+            #        t.start()
+            
 
 
         # Close connection to database
@@ -172,8 +183,11 @@ def lpPage():
         print("Uploaded file: " + filename)  ## Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
+    my_string = ""
     return render_template('lpPage.html', displayGpsResult=displayL(), form=form, file_url=file_url,
-                           display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult)
+                           display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult,
+                           display_cResult=display_cResult,
+                            my_string=display_cResult)
 
 
 @app.route('/fPage', methods=['GET', 'POST'])
@@ -230,8 +244,31 @@ def test2():
 
         gen.close()
 
+def buzz_for_5_seconds():
+    BuzzerPin = 4
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(BuzzerPin, GPIO.OUT) 
+    GPIO.setwarnings(False)
+
+    global Buzz 
+    Buzz = GPIO.PWM(BuzzerPin, 440) 
+    Buzz.start(50) 
+    A4=440
+    song = [A4]
+    beat = [1]
+
+    for i in range(0, int(5 / 0.13)):
+        Buzz.ChangeFrequency(song[0])
+        time.sleep(beat[0]*0.13)
+
+    Buzz.stop()
+    GPIO.cleanup()
+
 
 if __name__ == '__main__':
     # test1()
     # test2()
     app.run(host='0.0.0.0', debug=True, threaded=True, ssl_context='adhoc')
+
+
