@@ -20,6 +20,8 @@
 		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
 	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+	<link type="text/css" rel="stylesheet" href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css" />	
+	<script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"></script>
 </head>
 
 <body class="is-preload">
@@ -139,11 +141,22 @@
 							<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
 							<p id="geoLocationAddress" style="margin-left: 15px;"></p>
 
-							<div id="map" style="height:480px;"></div>
+							<!-- Map UI and Sidebar UI-->
+							<div id="map" style="height:520px; color:black;"></div> 
+							<div id="sidebar" style="width: 60%">
+								<div id="sidebarContent" style="display: none;">
+									<h1 style="color:black">Notifications</h1>
+								</div>
+							</div>
 
+
+							<!-- Javascript for Leaflet Map and Sidebar-->
 							<script>
 								var x = document.getElementById("geoLocationResult");
 								var y = document.getElementById("geoLocationAddress");
+
+								var sidebarContentElement = document.getElementById("sidebarContent");
+								var sidebarElement = document.getElementById("sidebar");
 
 								function getLocation() {
 									if (navigator.geolocation) {
@@ -190,7 +203,17 @@
 									var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
 										.bindPopup('Current location.')
 										.openPopup();
+									
+									var sidebar = L.control.sidebar('sidebar', {
+												position: 'left'
+											});
 
+											map.addControl(sidebar);
+											setTimeout(function () {
+												sidebar.show();
+											}, 500);
+
+											sidebarContentElement.style.display = "block";
 
 									//Creating dummy markers/events on the map
 
@@ -213,6 +236,27 @@
 									//45.420499, -75.673602
 									var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
 										.bindPopup('Parking violation.')
+									
+									//Event listeners for onclick on a pin 
+									dummy1.addEventListener("click", function(){
+										sidebar.setContent("<p>Theft</p>")			
+									}, false)
+
+									dummy2.addEventListener("click", function(){
+										sidebar.setContent("<p>Theft</p>")			
+									}, false)
+
+									dummy3.addEventListener("click", function(){
+										sidebar.setContent("<p>Assault</p>")			
+									}, false)
+
+									dummy4.addEventListener("click", function(){
+										sidebar.setContent("<p>Emergency</p>")			
+									}, false)
+
+									dummy5.addEventListener("click", function(){
+										sidebar.setContent("<p>Parking Violation</p>")			
+									}, false)
 								}
 							</script>
 						</div>
