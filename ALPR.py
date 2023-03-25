@@ -9,10 +9,10 @@ import pytesseract
 from dbFunc import plate_detected
 
 
-def readLP(filename):
+def readLP(frame):
     # pytesseract.pytesseract.tesseract_cmd= r'C:\Program Files\Tesseract-OCR\tesseract'
-    image = cv2.imread("uploads/" + filename)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # gray image
+    
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # gray image
     noise_reduction = cv2.bilateralFilter(gray, 13, 15, 15)  # apply filters for noise reduction
     edged = cv2.Canny(noise_reduction, 30, 200)  # detect edges
 
