@@ -30,7 +30,7 @@ def readLP(frame):
 
     mask = np.zeros(gray.shape, np.uint8)  # mask image
     new_image = cv2.drawContours(mask, [cnt], 0, 255, -1)
-    new_image = cv2.bitwise_and(image, image, mask=mask)
+    new_image = cv2.bitwise_and(frame, frame, mask=mask)
 
     (x, y) = np.where(mask == 255)  # crop out masked image
     (x1, y1) = (np.min(x), np.min(y))

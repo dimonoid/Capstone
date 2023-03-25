@@ -84,7 +84,7 @@ def gen_frames(debug=False, filename=None):
             # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
 
             lp_text = readLP(s_frame)
-            #print(lp_text)
+            print(lp_text)
             font = cv2.FONT_HERSHEY_SIMPLEX
             if lp_text is not None:
                 cv2.putText(s_frame, lp_text, (10, 50), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
