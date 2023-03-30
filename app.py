@@ -77,15 +77,10 @@ def gen_frames(debug=False, filename=None):
             break
         else:
             # Resize frame of video to 1/4 size for faster face recognition processing
-            s_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
             # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
 
-            lp_text = readLP(s_frame)  # TODO Why is this here?
-            print(lp_text)
-            font = cv2.FONT_HERSHEY_SIMPLEX
-            if lp_text is not None:
-                cv2.putText(s_frame, lp_text, (10, 50), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
-            small_frame = cv2.resize(s_frame, (0, 0), fx=4, fy=4)
+            
             rgb_small_frame = small_frame[:, :, ::-1]
 
             # Find all the faces and face encodings in the current frame of video
