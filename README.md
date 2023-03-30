@@ -1,4 +1,4 @@
-# CEG4912 - Smart Glasses
+# CEG4913 - Smart Glasses
 
 Project source code repository
 
@@ -20,6 +20,7 @@ Mohammad Osama – 8770948
 * Python 3.10, during installation click "install for all users", and "add to PATH"
 * https://cmake.org/download/
 
+
 * `pip3 install cmake`
 * `pip3 install Flask`
 * `pip3 install dlib`
@@ -32,8 +33,21 @@ Mohammad Osama – 8770948
 * `pip3 install geopy`
 * `pip3 install imutils`
 * `pip3 install matplotlib`
-* `pip3 install pytesseract`
-* `pip3 install numpy` 
+* `pip3 install numpy`
 * `pip install pyOpenSSL`
 
+Install Tesseract OCR:
+
+* https://stackoverflow.com/questions/50951955/pytesseract-tesseractnotfound-error-tesseract-is-not-installed-or-its-not-i
+* https://github.com/UB-Mannheim/tesseract/wiki
+* `pip3 install pytesseract`
+* 
+Change path:
+* `pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'`
+
 To run the flask application: `python3 app.py`
+
+Useful links:
+
+https://github.com/Worm4047/Sockets-Exp
+

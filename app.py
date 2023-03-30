@@ -1,6 +1,4 @@
 import glob
-#import RPi.GPIO as GPIO # Uncomment when running on the pi
-import time
 
 import face_recognition
 from flask import send_from_directory
@@ -8,14 +6,13 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
-from threading import Thread
 
 from ALPR import *
 from currentLocation import *
 from dbFunc import *
 from dbFunctions import find_lp_owner
 
-
+# import RPi.GPIO as GPIO # Uncomment when running on the pi
 
 # Initialize app
 app = Flask(__name__, static_url_path='', )
@@ -66,7 +63,7 @@ process_this_frame = True
 
 
 def gen_frames(debug=False, filename=None):
-    """Generates facial predictions either from camera or local files"""  
+    """Generates facial predictions either from camera or local files"""
     if not debug:
         camera = cv2.VideoCapture(0)
 
@@ -83,7 +80,7 @@ def gen_frames(debug=False, filename=None):
             s_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
             # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
 
-            lp_text = readLP(s_frame)
+            lp_text = readLP(s_frame)  # TODO Why is this here?
             print(lp_text)
             font = cv2.FONT_HERSHEY_SIMPLEX
             if lp_text is not None:
@@ -178,11 +175,9 @@ def lpPage():
             display_oResult = dbQuery['Owner']
             display_iResult = dbQuery['Info']
             display_cResult = dbQuery['Colour']
-            #if(display_cResult == "red"):
+            # if(display_cResult == "red"):
             #        t = Thread(target=buzz_for_5_seconds)
             #        t.start()
-            
-
 
         # Close connection to database
         con.close()
@@ -192,9 +187,10 @@ def lpPage():
         file_url = None
     my_string = ""
     return render_template('lpPage.html', displayGpsResult=displayL(), form=form, file_url=file_url,
-                           display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult,
+                           display_lpResult=display_lpResult, display_oResult=display_oResult,
+                           display_iResult=display_iResult,
                            display_cResult=display_cResult,
-                            my_string=display_cResult)
+                           my_string=display_cResult)
 
 
 @app.route('/fPage', methods=['GET', 'POST'])
@@ -251,6 +247,7 @@ def test2():
 
         gen.close()
 
+
 # def buzz_for_5_seconds():
 #     BuzzerPin = 4
 
@@ -276,6 +273,4 @@ def test2():
 if __name__ == '__main__':
     # test1()
     # test2()
-    app.run(host='0.0.0.0', debug=True, threaded=True, ssl_context='adhoc')
-
-
+    app.run(host='0.0.0.0', debug=True, threaded=False, ssl_context='adhoc')
