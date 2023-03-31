@@ -84,7 +84,7 @@ def gen_frames(debug=False, filename=None):
 
             if success:
                 print('gen_frames next frame processing...')
-                list_of_possible_plates, frame = readLP2(frame, 10, 1)  # use pipe and filter
+                list_of_possible_plates, frame = readLP2(frame, 10, 2)  # use pipe and filter
 
                 if 1:
                     # Resize frame of video to 1/4 size for faster face recognition processing
@@ -136,10 +136,12 @@ def gen_frames(debug=False, filename=None):
                         font = cv2.FONT_HERSHEY_DUPLEX
                         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
+                frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
                 ret, buffer = cv2.imencode('.jpg', frame)
-                frame = buffer.tobytes()
+                frame_ret = buffer.tobytes()
+
                 yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame_ret + b'\r\n')
             else:
                 running = False
                 break
