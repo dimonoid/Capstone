@@ -1,4 +1,6 @@
+import difflib
 import re
+import threading
 
 import cv2
 import imutils
@@ -9,6 +11,7 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 garbage_words_list = ['ontario', 'to', 'discover', 'mar']
+known_plates = ["CJTJ983"]
 
 
 def readLP(frame):
@@ -82,11 +85,17 @@ def rotate_image(image, angle):
     return image_rotated
 
 
-def readLP2(image_input, angle=0):
-    blob = cv2.dnn.blobFromImage(image_input, 1 / 255.0, (416, 416), swapRB=True, crop=False)
-    blob_to_show = blob[0, :, :, :].transpose(1, 2, 0)
+def tesseract_recognize_text(image_input):
+    text = pytesseract.image_to_string(image_input, lang='eng', config='--psm 7')
+    text = re.sub(r'[\W_]+', '', text)
+    for exception in garbage_words_list:
+        text = text.replace(exception, '')
+    return text
 
-    display_image(blob_to_show)
+
+def readLP2(image_input, angle=30, step=2):
+    blob = cv2.dnn.blobFromImage(image_input, 1 / 255.0, (416, 416), swapRB=True, crop=False)
+    # blob_to_show = blob[0, :, :, :].transpose(1, 2, 0)
 
     network.setInput(blob)
     output_from_network = network.forward(layers_names_output)
@@ -102,6 +111,8 @@ def readLP2(image_input, angle=0):
             class_current = np.argmax(scores)
             confidence_current = scores[class_current]
             if confidence_current > probability_minimum:
+                print(confidence_current)
+
                 box_current = detection[0:4] * np.array([w, h, w, h])
                 x_center, y_center, box_width, box_height = box_current.astype('int')
                 x_min = int(x_center - (box_width / 2))
@@ -112,7 +123,18 @@ def readLP2(image_input, angle=0):
 
     results = cv2.dnn.NMSBoxes(bounding_boxes, confidences, probability_minimum, threshold)
 
-    image_input_copy = image_input.copy()
+    image_input_clean_copy = image_input.copy()
+
+    dict_of_possible_plates = {}
+    dict_of_return_matches = {}
+    threads = []
+
+    def th(crop, angle_trial, j):
+        crop_rotated = rotate_image(crop, angle_trial)
+        text = tesseract_recognize_text(crop_rotated)
+        if len(text) > 2:
+            dict_of_possible_plates[text.upper()] = angle_trial
+        # print(j, angle_trial, text)
 
     if len(results) > 0:
         for i in results.flatten():
@@ -123,34 +145,57 @@ def readLP2(image_input, angle=0):
                           colour_box_current, 5)
             text_box_current = '{}: {:.4f}'.format(labels[int(class_numbers[i])], confidences[i])
             cv2.putText(image_input, text_box_current, (x_min, y_min - 7), cv2.FONT_HERSHEY_SIMPLEX,
-                        1.5, colour_box_current, 5)
+                        1.5, colour_box_current, 5)  # all boxes and accuracy will be drawn on image one by one
+
+            # display_image(image_input)
+
+            # continue text recognition
+            crop = cv2.cvtColor(image_input_clean_copy[(y_min):(y_min + box_height), (x_min):(x_min + box_width)],
+                                cv2.COLOR_BGR2RGB)
+
+            # display_image(crop)
+
+            for j, angle_trial in enumerate(range(-angle, angle + 1, step)):
+                t = threading.Thread(target=th, args=(crop, angle_trial, j))
+                t.start()
+                threads.append(t)
+
+            for j, t in enumerate(threads):
+                t.join()
+
+            del threads
 
     else:
-        print('No license plate detected')
-        return []
+        # if no license plates detected, try to recognize text on the whole image
+        #image_input_clean_copy = cv2.resize(image_input_clean_copy, (0, 0), fx=0.2, fy=0.2)
+        #display_image(image_input_clean_copy)
+        for j, angle_trial in enumerate(range(-angle, angle + 1, step)):
+            t = threading.Thread(target=th, args=(image_input_clean_copy, angle_trial, j))
+            t.start()
+            threads.append(t)
 
-    display_image(image_input)
+        for j, t in enumerate(threads):
+            t.join()
 
-    crop = cv2.cvtColor(image_input_copy[(y_min):(y_min + box_height), (x_min):(x_min + box_width)], cv2.COLOR_BGR2RGB)
+        del threads
 
-    display_image(crop)
+    list_possible_plates = list(dict_of_possible_plates.keys())
 
-    list_of_possible_plates = []
+    for raw_plate in list_possible_plates:
+        for el in difflib.get_close_matches(raw_plate, known_plates, n=3, cutoff=0.5):
+            dict_of_return_matches[el] = 0
 
-    for anngle_trial in range(-angle, angle + 1, 1):
-        crop_rotated = rotate_image(crop, anngle_trial)
-        text = pytesseract.image_to_string(crop_rotated, lang='eng', config='--psm 7')
-        text = re.sub(r'[\W_]+', '', text)
-        for exception in garbage_words_list:
-            text = text.replace(exception, '')
+    if len(dict_of_return_matches) == 0:
+        list_return_matches = list_possible_plates
+    else:
+        list_return_matches = list(dict_of_return_matches.keys())
 
-        if len(text) > 0:
-            list_of_possible_plates.append(text)
-        print(anngle_trial, text)
-
-    return list_of_possible_plates
+    list_return_matches.sort()  # sort alphabetically
+    list_return_matches.sort(key=lambda x: len(x), reverse=True)
+    print(list_return_matches)
+    # display_image(image_input)
+    return list_return_matches, image_input
 
 
 if __name__ == '__main__':
-    ret = readLP2(cv2.imread('./input/labeled-licence-plates-dataset/dataset/train/145.jpg'), 5)
-    print(ret)
+    ret = readLP2(cv2.imread('./input/labeled-licence-plates-dataset/dataset/train/145.jpg'), 45, 2)

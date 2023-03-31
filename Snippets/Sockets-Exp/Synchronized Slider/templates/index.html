@@ -7,17 +7,17 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.js"></script>
     <script type="text/javascript">
-		$(document).ready(function(){
-			// sending a connect request to the server.
-			var socket = io.connect('https://10.192.33.252:5001');
+        $(document).ready(function () {
+            // sending a connect request to the server.
+            var socket = io.connect('https://10.192.33.252:5001');
 
-			socket.on('after connect', function(msg){
-            	console.log('After connect', msg);
+            socket.on('after connect', function (msg) {
+                console.log('After connect', msg);
             });
 
             // Send to others
-			// An event handler for a change of value
-			//$('input.sync').on('input', function(event) {
+            // An event handler for a change of value
+            //$('input.sync').on('input', function(event) {
             //    socket.emit('Slider value changed', {who: $(this).attr('id'), data: $(this).val()});
             //    return false;
             //});
@@ -31,9 +31,9 @@
 
             function accelerometerUpdate(event) {
 //
-                var aX = event.accelerationIncludingGravity.x*1;
-                var aY = event.accelerationIncludingGravity.y*1;
-                var aZ = event.accelerationIncludingGravity.z*1;
+                var aX = event.accelerationIncludingGravity.x;
+                var aY = event.accelerationIncludingGravity.y;
+                var aZ = event.accelerationIncludingGravity.z;
                 //The following two lines are just to calculate a
                 // tilt. Not really needed.
                 //xPosition = Math.atan2(aY, aZ);
@@ -41,6 +41,7 @@
                 console.log(aX, aY, aZ);
                 socket.emit('Slider value changed', {"aX": aX, "aY": aY, "aZ": aZ});
             }
+
             window.addEventListener("devicemotion", accelerometerUpdate, true);
 
             //const acl = new Accelerometer({ frequency: 60 });
@@ -54,9 +55,7 @@
 
             //acl.start();
 
-		});
-
-
+        });
 
 
     </script>

@@ -24,8 +24,8 @@ def test_connect():
 @socketio.on('Slider value changed')
 def value_changed(message):
     print(message)
-    #values[message['who']] = message['data']
-    #emit('update value', message, broadcast=True)
+    # values[message['who']] = message['data']
+    # emit('update value', message, broadcast=True)
 
 
 if __name__ == '__main__':
