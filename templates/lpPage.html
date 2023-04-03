@@ -149,7 +149,7 @@
 								</div>
 							</div>
 
-
+							<div id="data"></div>
 							<!-- Javascript for Leaflet Map and Sidebar-->
 							<script>
 								var x = document.getElementById("geoLocationResult");
@@ -215,49 +215,25 @@
 
 											sidebarContentElement.style.display = "block";
 
-									//Creating dummy markers/events on the map
-
-									//45.390731, -75.744219
-									var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
-										.bindPopup('Theft.')
-
-									//45.428816, -75.691114
-									var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
-										.bindPopup('Theft.')
-
-									//45.417656, -75.690743
-									var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
-										.bindPopup('Assault.')
-
-									//45.423235, -75.677401
-									var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
-										.bindPopup('Emergency.')
-
-									//45.420499, -75.673602
-									var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
-										.bindPopup('Parking violation.')
-									
-									//Event listeners for onclick on a pin 
-									dummy1.addEventListener("click", function(){
-										sidebar.setContent("<p>Theft</p>")			
-									}, false)
-
-									dummy2.addEventListener("click", function(){
-										sidebar.setContent("<p>Theft</p>")			
-									}, false)
-
-									dummy3.addEventListener("click", function(){
-										sidebar.setContent("<p>Assault</p>")			
-									}, false)
-
-									dummy4.addEventListener("click", function(){
-										sidebar.setContent("<p>Emergency</p>")			
-									}, false)
-
-									dummy5.addEventListener("click", function(){
-										sidebar.setContent("<p>Parking Violation</p>")			
-									}, false)
+									//This function pulls all the Lat/Long data for license plates from our database and adds pins for each one on the Map.
+									$(document).ready(function() {
+										$.ajax({
+										type: "GET",
+										url: "/markers",
+										success: function(response) {
+											//Creating a pin for each Lat/Long row in our database.
+											for (var i = 0; i < response.length; i++) {
+												var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
+              									marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
+												marker.addEventListener("click", function(){
+												sidebar.setContent(response[i].name)			
+													}, false)
+												}
+											}
+										});
+									});
 								}
+							
 							</script>
 						</div>
 					</section>
