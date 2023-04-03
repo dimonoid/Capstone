@@ -28,7 +28,7 @@
     <script src="{{ url_for('static', filename='js/L.Control.Sidebar.js') }}"></script>
 </head>
 
-<body class="is-preload">
+<body class="is-preload" onload="getLocation()">
 
 <!-- Page Wrapper -->
 <div id="page-wrapper">
@@ -58,17 +58,16 @@
 
     <!-- Wrapper -->
     <section id="wrapper">
-        <header>
+        <div class="inner">
             <div class="inner">
-                <div class="inner">
-                    <h2>Live Camera Feed</h2>
-                    <!-- <h2 class="mt-5">Live Stream</h2> -->
-                    <img src="{{ url_for('video_feed') }}"
-                         width="500"
-                         height="300">
+                <h2>Live Camera Feed</h2>
+                <!-- <h2 class="mt-5">Live Stream</h2> -->
+                <img src="{{ url_for('video_feed') }}"
+                     width="500"
+                     height="300">
 
-                </div>
-                <!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
+            </div>
+            <!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
                 <label for="file">Upload</label>
                 <form method="post" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
@@ -89,231 +88,231 @@
                         {% endif %}
                     </div>
                 </form> -->
-                <div class="inner">
-                    <ul class="actions">
+            <div class="inner">
+                <ul class="actions">
 
-                        <li>
-                            <!-- <p> Detected license plate : <b>{{ display_lpResult }}</b>
+                    <li>
+                        <!-- <p> Detected license plate : <b>{{ display_lpResult }}</b>
                                 <br> Owner : <b>{{ display_oResult }}</b>
                                 <br> Information : <b>{{ display_iResult }}</b>
                                 <br> Threat: <b id="cresult"> {{display_cResult}}</b> -->
 
-                            <!-- Style for alerts -->
-                            <style>
-                                .alert {
-                                    display: none;
-                                    opacity: 1;
-                                    transition: opacity 1s ease;
+                        <!-- Style for alerts -->
+                        <style>
+                            .alert {
+                                display: none;
+                                opacity: 1;
+                                transition: opacity 1s ease;
 
-                                }
+                            }
 
-                                .alert:hover {
-                                    opacity: 0.5;
+                            .alert:hover {
+                                opacity: 0.5;
 
-                                }
+                            }
 
 
-                                .closebtn {
-                                    margin-left: 15px;
-                                    color: white;
-                                    font-weight: bold;
-                                    float: right;
-                                    font-size: 22px;
-                                    line-height: 20px;
-                                    cursor: pointer;
-                                    transition: 0.3s;
+                            .closebtn {
+                                margin-left: 15px;
+                                color: white;
+                                font-weight: bold;
+                                float: right;
+                                font-size: 22px;
+                                line-height: 20px;
+                                cursor: pointer;
+                                transition: 0.3s;
 
-                                }
+                            }
 
-                                .closebtn:hover {
-                                    color: rgb(0, 0, 0);
-                                }
-                            </style>
-                            <!-- HTML for alerts-->
-                            <div class="alert" id="1748">
+                            .closebtn:hover {
+                                color: rgb(0, 0, 0);
+                            }
+                        </style>
+                        <!-- HTML for alerts-->
+                        <div class="alert" id="1748">
 									<span id="closedbtn" class="closebtn"
                                           onclick="this.parentElement.style.display='none';">&times; </span>
-                                New Car Detected.
-                            </div>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
-                <section>
-                    <h3 class="major">Crime Map</h3>
-                    <div class="inner">
-                        <button onclick="getLocation()">Update Location</button>
-                        <p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
-                        <p id="geoLocationAddress" style="margin-left: 15px;"></p>
-
-                        <!-- Map UI and Sidebar UI-->
-                        <div id="map" style="height:520px; color:black;"></div>
-                        <div id="sidebar" style="width: 60%">
-                            <div id="sidebarContent" style="display: none;">
-                                <h1 style="color:black">Notifications</h1>
-                            </div>
+                            New Car Detected.
                         </div>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <section>
+                <h3 class="major">Crime Map</h3>
+                <div class="inner">
+
+                    <p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+                    <p id="geoLocationAddress" style="margin-left: 15px;"></p>
+
+                    <!-- Map UI and Sidebar UI-->
+                    <div id="map" style="height:520px; color:black;"></div>
+                    <div id="sidebar" style="width: 60%">
+                        <div id="sidebarContent" style="display: none;">
+                            <h1 style="color:black">Notifications</h1>
+                        </div>
+                    </div>
 
 
-                        <!-- Javascript for Leaflet Map and Sidebar-->
-                        <script>
-                            var x = document.getElementById("geoLocationResult");
-                            var y = document.getElementById("geoLocationAddress");
+                    <!-- Javascript for Leaflet Map and Sidebar-->
+                    <script>
+                        var x = document.getElementById("geoLocationResult");
+                        var y = document.getElementById("geoLocationAddress");
 
-                            var sidebarContentElement = document.getElementById("sidebarContent");
-                            var sidebarElement = document.getElementById("sidebar");
+                        var sidebarContentElement = document.getElementById("sidebarContent");
+                        var sidebarElement = document.getElementById("sidebar");
 
-                            function getLocation() {
-                                if (navigator.geolocation) {
-                                    navigator.geolocation.getCurrentPosition(showPosition);
-                                } else {
-                                    x.innerHTML = "Geolocation is not supported by this browser.";
-                                }
+                        function getLocation() {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(showPosition);
+                            } else {
+                                x.innerHTML = "Geolocation is not supported by this browser.";
                             }
+                        }
 
-                            function showPosition(position) {
-                                //Obtain current [longitude, latitude] from API
-                                var currentLong = position.coords.longitude;
-                                var currentLat = position.coords.latitude;
+                        function showPosition(position) {
+                            //Obtain current [longitude, latitude] from API
+                            var currentLong = position.coords.longitude;
+                            var currentLat = position.coords.latitude;
 
-                                //Reverse Geocoding (Coords --> Address)
-                                var requestOptions = {
-                                    method: 'GET',
-                                };
+                            //Reverse Geocoding (Coords --> Address)
+                            var requestOptions = {
+                                method: 'GET',
+                            };
 
-                                var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon=' + currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
+                            var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon=' + currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
 
-                                fetch(reverseString).then(result => result.json())
-                                    .then(featureCollection => {
-                                        if (featureCollection.features.length === 0) {
-                                            document.getElementById("status").textContent = "The address is not found";
-                                            return;
-                                        }
-                                        const foundAddress = featureCollection.features[0];
-                                        console.log(foundAddress.properties);
-                                        console.log(foundAddress.properties.address_line1);
-                                        y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
-                                    });
-
-
-                                x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>";
-
-                                //Javascript for the Leaflet map
-                                var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
-                                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                    maxZoom: 19,
-                                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                                }).addTo(map)
-
-                                var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
-                                    .bindPopup('Current location.')
-                                    .openPopup();
-
-                                var sidebar = L.control.sidebar('sidebar', {
-                                    position: 'left'
+                            fetch(reverseString).then(result => result.json())
+                                .then(featureCollection => {
+                                    if (featureCollection.features.length === 0) {
+                                        document.getElementById("status").textContent = "The address is not found";
+                                        return;
+                                    }
+                                    const foundAddress = featureCollection.features[0];
+                                    console.log(foundAddress.properties);
+                                    console.log(foundAddress.properties.address_line1);
+                                    y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
                                 });
 
-                                map.addControl(sidebar);
-                                setTimeout(function () {
-                                    sidebar.show();
-                                }, 500);
 
-                                sidebarContentElement.style.display = "block";
+                            x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>";
 
-                                //Creating dummy markers/events on the map
+                            //Javascript for the Leaflet map
+                            var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
+                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                maxZoom: 19,
+                                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                            }).addTo(map)
 
-                                //45.390731, -75.744219
-                                var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
-                                    .bindPopup('Theft.')
+                            var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
+                                .bindPopup('Current location.')
+                                .openPopup();
 
-                                //45.428816, -75.691114
-                                var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
-                                    .bindPopup('Theft.')
+                            var sidebar = L.control.sidebar('sidebar', {
+                                position: 'left'
+                            });
 
-                                //45.417656, -75.690743
-                                var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
-                                    .bindPopup('Assault.')
+                            map.addControl(sidebar);
+                            setTimeout(function () {
+                                sidebar.show();
+                            }, 500);
 
-                                //45.423235, -75.677401
-                                var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
-                                    .bindPopup('Emergency.')
+                            sidebarContentElement.style.display = "block";
 
-                                //45.420499, -75.673602
-                                var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
-                                    .bindPopup('Parking violation.')
+                            //Creating dummy markers/events on the map
 
-                                //Event listeners for onclick on a pin
-                                dummy1.addEventListener("click", function () {
-                                    sidebar.setContent("<p>Theft</p>")
-                                }, false)
+                            //45.390731, -75.744219
+                            var dummy1 = L.marker([45.390731, -75.744219]).addTo(map)
+                                .bindPopup('Theft.')
 
-                                dummy2.addEventListener("click", function () {
-                                    sidebar.setContent("<p>Theft</p>")
-                                }, false)
+                            //45.428816, -75.691114
+                            var dummy2 = L.marker([45.428816, -75.691114]).addTo(map)
+                                .bindPopup('Theft.')
 
-                                dummy3.addEventListener("click", function () {
-                                    sidebar.setContent("<p>Assault</p>")
-                                }, false)
+                            //45.417656, -75.690743
+                            var dummy3 = L.marker([45.417656, -75.690743]).addTo(map)
+                                .bindPopup('Assault.')
 
-                                dummy4.addEventListener("click", function () {
-                                    sidebar.setContent("<p>Emergency</p>")
-                                }, false)
+                            //45.423235, -75.677401
+                            var dummy4 = L.marker([45.423235, -75.677401]).addTo(map)
+                                .bindPopup('Emergency.')
 
-                                dummy5.addEventListener("click", function () {
-                                    sidebar.setContent("<p>Parking Violation</p>")
-                                }, false)
-                            }
-                        </script>
-                    </div>
-                </section>
-            </div>
-            <!-- Potential future feature (List of active incidents)
+                            //45.420499, -75.673602
+                            var dummy5 = L.marker([45.420499, -75.673602]).addTo(map)
+                                .bindPopup('Parking violation.')
 
-                        <div class="inner">
-                            <br><br>
-                            <h3 class="major">Active incidents</h3>
-                            <table>
-                                <tr>
-                                  <th>Incident</th>
-                                  <th>Location</th>
-                                  <th>Status</th>
-                                </tr>
+                            //Event listeners for onclick on a pin
+                            dummy1.addEventListener("click", function () {
+                                sidebar.setContent("<p>Theft</p>")
+                            }, false)
 
-                                <tr>
-                                  <td>Theft</td>
-                                  <td>[45.390731, -75.744219]</td>
-                                  <td></td>
-                                </tr>
-                                <tr>
-                                  <td>Centro comercial Moctezuma</td>
-                                  <td>Francisco Chang</td>
-                                  <td>Officer at location</td>
-                                </tr>
-                                <tr>
-                                    <td>Centro comercial Moctezuma</td>
-                                    <td>Francisco Chang</td>
-                                    <td>Mexico</td>
-                                </tr>
-                                <tr>
-                                    <td>Centro comercial Moctezuma</td>
-                                    <td>Francisco Chang</td>
-                                    <td>Mexico</td>
-                                </tr>
-                                <tr>
-                                    <td>Centro comercial Moctezuma</td>
-                                    <td>Francisco Chang</td>
-                                    <td>Mexico</td>
-                                </tr>
-                              </table>
-                        </div>
-                    </header>
-                </section>
-                -->
+                            dummy2.addEventListener("click", function () {
+                                sidebar.setContent("<p>Theft</p>")
+                            }, false)
 
+                            dummy3.addEventListener("click", function () {
+                                sidebar.setContent("<p>Assault</p>")
+                            }, false)
 
-            <!-- Footer -->
-            <section id="footer">
+                            dummy4.addEventListener("click", function () {
+                                sidebar.setContent("<p>Emergency</p>")
+                            }, false)
+
+                            dummy5.addEventListener("click", function () {
+                                sidebar.setContent("<p>Parking Violation</p>")
+                            }, false)
+                        }
+                    </script>
+                </div>
             </section>
+        </div>
+        <!-- Potential future feature (List of active incidents)
+
+                    <div class="inner">
+                        <br><br>
+                        <h3 class="major">Active incidents</h3>
+                        <table>
+                            <tr>
+                              <th>Incident</th>
+                              <th>Location</th>
+                              <th>Status</th>
+                            </tr>
+
+                            <tr>
+                              <td>Theft</td>
+                              <td>[45.390731, -75.744219]</td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td>Centro comercial Moctezuma</td>
+                              <td>Francisco Chang</td>
+                              <td>Officer at location</td>
+                            </tr>
+                            <tr>
+                                <td>Centro comercial Moctezuma</td>
+                                <td>Francisco Chang</td>
+                                <td>Mexico</td>
+                            </tr>
+                            <tr>
+                                <td>Centro comercial Moctezuma</td>
+                                <td>Francisco Chang</td>
+                                <td>Mexico</td>
+                            </tr>
+                            <tr>
+                                <td>Centro comercial Moctezuma</td>
+                                <td>Francisco Chang</td>
+                                <td>Mexico</td>
+                            </tr>
+                          </table>
+                    </div>
+                </header>
+            </section>
+            -->
+
+    </section>
+    <!-- Footer -->
+    <!--<section id="footer">
+    </section>-->
 </div>
 
 

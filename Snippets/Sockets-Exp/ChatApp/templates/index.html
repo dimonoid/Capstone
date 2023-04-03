@@ -90,7 +90,7 @@
                 if (message.length == 0) return;
                 socket.emit('new message', {message: message, from: username, to: chatting_with});
                 add_message_to_chat(message, username);
-                return;
+
             })
 
             socket.on('active users updated', function (message) {
