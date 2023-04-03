@@ -153,11 +153,10 @@
                         </div>
                     </div>
 
-							<div id="data"></div>
-							<!-- Javascript for Leaflet Map and Sidebar-->
-							<script>
-								var x = document.getElementById("geoLocationResult");
-								var y = document.getElementById("geoLocationAddress");
+                    <!-- Javascript for Leaflet Map and Sidebar-->
+                    <script>
+                        var x = document.getElementById("geoLocationResult");
+                        var y = document.getElementById("geoLocationAddress");
 
                         var sidebarContentElement = document.getElementById("sidebarContent");
                         var sidebarElement = document.getElementById("sidebar");
@@ -219,71 +218,71 @@
 
                             sidebarContentElement.style.display = "block";
 
-									//This function pulls all the Lat/Long data for license plates from our database and adds pins for each one on the Map.
-									$(document).ready(function() {
-										$.ajax({
-										type: "GET",
-										url: "/markers",
-										success: function(response) {
-											//Creating a pin for each Lat/Long row in our database.
-											for (var i = 0; i < response.length; i++) {
-												var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
-              									marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
-												marker.addEventListener("click", function(){
-												sidebar.setContent(response[i].name)
-													}, false)
-												}
-											}
-										});
-									});
-								}
+                            //This function pulls all the Lat/Long data for license plates from our database and adds pins for each one on the Map.
+                            $(document).ready(function () {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/markers",
+                                    success: function (response) {
+                                        //Creating a pin for each Lat/Long row in our database.
+                                        for (var i = 0; i < response.length; i++) {
+                                            var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
+                                            marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
+                                            marker.addEventListener("click", function () {
+                                                sidebar.setContent(response[i].name)
+                                            }, false)
+                                        }
+                                    }
+                                });
+                            });
+                        }
 
-							</script>
-						</div>
-					</section>
-				</div>
-				<!-- Potential future feature (List of active incidents)
-
-                    <div class="inner">
-                        <br><br>
-                        <h3 class="major">Active incidents</h3>
-                        <table>
-                            <tr>
-                              <th>Incident</th>
-                              <th>Location</th>
-                              <th>Status</th>
-                            </tr>
-
-                            <tr>
-                              <td>Theft</td>
-                              <td>[45.390731, -75.744219]</td>
-                              <td></td>
-                            </tr>
-                            <tr>
-                              <td>Centro comercial Moctezuma</td>
-                              <td>Francisco Chang</td>
-                              <td>Officer at location</td>
-                            </tr>
-                            <tr>
-                                <td>Centro comercial Moctezuma</td>
-                                <td>Francisco Chang</td>
-                                <td>Mexico</td>
-                            </tr>
-                            <tr>
-                                <td>Centro comercial Moctezuma</td>
-                                <td>Francisco Chang</td>
-                                <td>Mexico</td>
-                            </tr>
-                            <tr>
-                                <td>Centro comercial Moctezuma</td>
-                                <td>Francisco Chang</td>
-                                <td>Mexico</td>
-                            </tr>
-                          </table>
-                    </div>
-                </header>
+                    </script>
+                </div>
             </section>
-            -->
+        </div>
+        <!-- Potential future feature (List of active incidents)
+
+            <div class="inner">
+                <br><br>
+                <h3 class="major">Active incidents</h3>
+                <table>
+                    <tr>
+                      <th>Incident</th>
+                      <th>Location</th>
+                      <th>Status</th>
+                    </tr>
+
+                    <tr>
+                      <td>Theft</td>
+                      <td>[45.390731, -75.744219]</td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <td>Centro comercial Moctezuma</td>
+                      <td>Francisco Chang</td>
+                      <td>Officer at location</td>
+                    </tr>
+                    <tr>
+                        <td>Centro comercial Moctezuma</td>
+                        <td>Francisco Chang</td>
+                        <td>Mexico</td>
+                    </tr>
+                    <tr>
+                        <td>Centro comercial Moctezuma</td>
+                        <td>Francisco Chang</td>
+                        <td>Mexico</td>
+                    </tr>
+                    <tr>
+                        <td>Centro comercial Moctezuma</td>
+                        <td>Francisco Chang</td>
+                        <td>Mexico</td>
+                    </tr>
+                  </table>
+            </div>
+        </header>
+    </section>
+    -->
 
     </section>
     <!-- Footer -->
@@ -342,7 +341,7 @@
     }
 
 
-	</script>
+</script>
 
 </body>
 
