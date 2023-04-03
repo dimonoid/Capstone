@@ -28,7 +28,7 @@
     <script src="{{ url_for('static', filename='js/L.Control.Sidebar.js') }}"></script>
 </head>
 
-<body class="is-preload" onload="loadMap()">
+<body class="is-preload" onload="getLocation()">
 
 <!-- Page Wrapper -->
 <div id="page-wrapper">
@@ -366,35 +366,8 @@
     }
 
 
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"
-        integrity="sha512-PUA/lU2Q3A6vYK2asC0fL8L/0o/6JNyybCEcFJgMibASGJXNvKj2QSwC+Wms8i/eW/rhJvFG+Zg66cZn8HxkXg=="
-        crossorigin=""></script>
-<script>
-    function loadMap() {
-        var mymap = L.map('mapid').setView([51.505, -0.09], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1
-        }).addTo(mymap);
+	</script>
 
-        // Here we fetch the markers data from the server
-        fetch('/markers')
-            .then(response => response.json())
-            .then(data => {
-                // Loop through the markers data and add them to the map
-                data.forEach(marker => {
-                    L.marker([marker.lat, marker.lng]).addTo(mymap).bindPopup(marker.name);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching markers data:', error);
-            });
-    }
-</script>
 </body>
 
 </html>
