@@ -1,0 +1,5 @@
+INSERT INTO Markers (latitude, longitude, name) VALUES ('45.390731', '-75.744219', '1');
+INSERT INTO Markers (latitude, longitude, name) VALUES ('45.428816', '-75.691114', '2');
+INSERT INTO Markers (latitude, longitude, name) VALUES ('45.417656', '-75.690743', '3');
+INSERT INTO Markers (latitude, longitude, name) VALUES ('45.423235', '-75.677401', '4');
+INSERT INTO Markers (latitude, longitude, name) VALUES ('45.420499', '-75.673602', '5');

@@ -3,7 +3,7 @@ import glob
 import time
 
 import face_recognition
-from flask import send_from_directory
+from flask import jsonify, send_from_directory
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -222,6 +222,21 @@ def displayLocation():
     displayGpsResult = str(getLocation())
     return displayGpsResult
 
+@app.route('/markers')
+def get_markers_data():
+    conn = sqlite3.connect('Database.db')
+    c = conn.cursor()
+    c.execute('SELECT latitude, longitude, name FROM Markers')
+    data = c.fetchall()
+    conn.close()
+    markers = []
+    for item in data:
+        markers.append({
+            'lat': item[0],
+            'lng': item[1],
+            'name': item[2]
+        })
+    return jsonify(markers)
 
 def test1():
     """All results are unknown means very low false positives, what is good result"""
@@ -244,26 +259,26 @@ def test2():
 
         gen.close()
 
-def buzz_for_5_seconds():
-    BuzzerPin = 4
+# def buzz_for_5_seconds():
+#     BuzzerPin = 4
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(BuzzerPin, GPIO.OUT) 
-    GPIO.setwarnings(False)
+#     GPIO.setmode(GPIO.BCM)
+#     GPIO.setup(BuzzerPin, GPIO.OUT) 
+#     GPIO.setwarnings(False)
 
-    global Buzz 
-    Buzz = GPIO.PWM(BuzzerPin, 440) 
-    Buzz.start(50) 
-    A4=440
-    song = [A4]
-    beat = [1]
+#     global Buzz 
+#     Buzz = GPIO.PWM(BuzzerPin, 440) 
+#     Buzz.start(50) 
+#     A4=440
+#     song = [A4]
+#     beat = [1]
 
-    for i in range(0, int(5 / 0.13)):
-        Buzz.ChangeFrequency(song[0])
-        time.sleep(beat[0]*0.13)
+#     for i in range(0, int(5 / 0.13)):
+#         Buzz.ChangeFrequency(song[0])
+#         time.sleep(beat[0]*0.13)
 
-    Buzz.stop()
-    GPIO.cleanup()
+#     Buzz.stop()
+#     GPIO.cleanup()
 
 
 if __name__ == '__main__':

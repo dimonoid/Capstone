@@ -24,7 +24,7 @@
 	<script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"></script>
 </head>
 
-<body class="is-preload">
+<body class="is-preload" onload="getLocation()">
 
 	<!-- Page Wrapper -->
 	<div id="page-wrapper">
@@ -137,7 +137,7 @@
 					<section>
 						<h3 class="major">Crime Map</h3>
 						<div class="inner">
-							<button onclick="getLocation()">Update Location</button>
+							
 							<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
 							<p id="geoLocationAddress" style="margin-left: 15px;"></p>
 
