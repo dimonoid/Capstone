@@ -1,6 +1,7 @@
 import glob
 #import RPi.GPIO as GPIO # Uncomment when running on the pi
 import time
+import boto3
 
 import face_recognition
 from flask import jsonify, send_from_directory
@@ -27,6 +28,12 @@ app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 
+sns_client = boto3.client(
+    'sns',
+    region_name='ca-central-1',
+    aws_access_key_id='',
+    aws_secret_access_key=''
+)
 
 class UploadForm(FlaskForm):
     photo = FileField(
@@ -237,6 +244,15 @@ def get_markers_data():
             'name': item[2]
         })
     return jsonify(markers)
+
+@app.route('/send-text', methods=['POST'])
+def send_text():
+    phone_number = '+16135014983'
+    response = sns_client.publish(
+        PhoneNumber=phone_number,
+        Message='Hello from AWS SNS!'
+    )
+    return jsonify({'message': 'Text message sent!'})
 
 def test1():
     """All results are unknown means very low false positives, what is good result"""
