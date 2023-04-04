@@ -36,6 +36,7 @@ Mohammad Osama – 8770948
 * `pip3 install matplotlib`
 * `pip3 install numpy`
 * `pip install pyOpenSSL`
+* `pip install boto3`
 
 Install Tesseract OCR:
 

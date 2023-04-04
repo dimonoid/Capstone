@@ -1,6 +1,7 @@
 import glob
 # import RPi.GPIO as GPIO # Uncomment when running on the pi
-# import time
+import time
+import boto3
 
 import face_recognition
 from flask import jsonify, send_from_directory
@@ -8,14 +9,12 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
-# from threading import Thread
+from threading import Thread
 
 from ALPR import *
 from currentLocation import *
 from dbFunc import *
 from dbFunctions import find_lp_owner
-
-# import RPi.GPIO as GPIO # Uncomment when running on the pi
 
 # Initialize app
 app = Flask(__name__, static_url_path='', )
@@ -26,6 +25,13 @@ app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
+
+sns_client = boto3.client(
+    'sns',
+    region_name='ca-central-1',
+    aws_access_key_id='',
+    aws_secret_access_key=''
+)
 
 
 class UploadForm(FlaskForm):
@@ -273,6 +279,16 @@ def get_markers_data():
             'name': item[2]
         })
     return jsonify(markers)
+
+
+@app.route('/send-text', methods=['POST'])
+def send_text():
+    phone_number = '+16135014983'
+    response = sns_client.publish(
+        PhoneNumber=phone_number,
+        Message='Hello from AWS SNS!'
+    )
+    return jsonify({'message': 'Text message sent!'})
 
 
 def test1():
