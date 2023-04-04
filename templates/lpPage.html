@@ -62,9 +62,7 @@
             <div class="inner">
                 <h2>Live Camera Feed</h2>
                 <!-- <h2 class="mt-5">Live Stream</h2> -->
-                <img src="{{ url_for('video_feed') }}"
-                     width="500"
-                     height="300">
+                <img src="{{ url_for('video_feed') }}" width="500" height="300">
 
             </div>
             <!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
@@ -224,13 +222,22 @@
                                     type: "GET",
                                     url: "/markers",
                                     success: function (response) {
-                                        //Creating a pin for each Lat/Long row in our database.
+                                        // Creating a pin and list item for each Lat/Long row in our database.
                                         for (var i = 0; i < response.length; i++) {
+                                            // Creating a Leaflet marker and adding it to the map
                                             var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
                                             marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
-                                            marker.addEventListener("click", function () {
-                                                sidebar.setContent(response[i].name)
-                                            }, false)
+
+                                            // Creating a list item for the marker and adding it to the list
+                                            var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <b>Lat:</b> ' + response[i].lat + ' <b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
+                                            listItem.data('marker', marker);
+
+                                            // Adding a click event listener to the list item that zooms to the marker location when clicked
+                                            listItem.click(function () {
+                                                var marker = $(this).data('marker');
+                                                map.flyTo(marker.getLatLng(), 16); //zoom level is set to 16
+                                                marker.openPopup(); //open the popup associated with the marker
+                                            });
                                         }
                                     }
                                 });
@@ -284,10 +291,13 @@
     </section>
     -->
 
+
     </section>
     <!-- Footer -->
-    <!--<section id="footer">
-    </section>-->
+    <ul id="markerList"></ul>
+
+    <section id="footer">
+    </section>
 </div>
 
 
