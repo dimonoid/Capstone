@@ -20,7 +20,7 @@
 		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
 	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-	<link type="text/css" rel="stylesheet" href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css" />	
+	<link type="text/css" rel="stylesheet" href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css" />
 	<script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"></script>
 </head>
 
@@ -59,10 +59,8 @@
 					<div class="inner">
 						<h2>Live Camera Feed</h2>
 						<!-- <h2 class="mt-5">Live Stream</h2> -->
-						<img src="{{ url_for('video_feed') }}"
-						width = "500"
-						height = "300">
-						
+						<img src="{{ url_for('video_feed') }}" width="500" height="300">
+
 					</div>
 					<!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
 					<label for="file">Upload</label>
@@ -94,37 +92,38 @@
 									<br> Information : <b>{{ display_iResult }}</b>
 									<br> Threat: <b id="cresult"> {{display_cResult}}</b> -->
 
-									<!-- Style for alerts -->
-									<style>
-										.alert {
-											display: none;
-											opacity: 1;
-											transition: opacity 1s ease;
-											
-										}
-										.alert:hover{
-											opacity: 0.5;
-											
-										}
+								<!-- Style for alerts -->
+								<style>
+									.alert {
+										display: none;
+										opacity: 1;
+										transition: opacity 1s ease;
+
+									}
+
+									.alert:hover {
+										opacity: 0.5;
+
+									}
 
 
-										.closebtn {
-											margin-left: 15px;
-											color: white;
-											font-weight: bold;
-											float: right;
-											font-size: 22px;
-											line-height: 20px;
-											cursor: pointer;
-											transition: 0.3s;
-											
-										}
+									.closebtn {
+										margin-left: 15px;
+										color: white;
+										font-weight: bold;
+										float: right;
+										font-size: 22px;
+										line-height: 20px;
+										cursor: pointer;
+										transition: 0.3s;
 
-										.closebtn:hover {
-											color: rgb(0, 0, 0);
-										}
-									</style>
-									<!-- HTML for alerts-->
+									}
+
+									.closebtn:hover {
+										color: rgb(0, 0, 0);
+									}
+								</style>
+								<!-- HTML for alerts-->
 								<div class="alert" id="1748">
 									<span id="closedbtn" class="closebtn"
 										onclick="this.parentElement.style.display='none';">&times; </span>
@@ -137,18 +136,18 @@
 					<section>
 						<h3 class="major">Crime Map</h3>
 						<div class="inner">
-							
+
 							<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
 							<p id="geoLocationAddress" style="margin-left: 15px;"></p>
 
 							<!-- Map UI and Sidebar UI-->
-							<div id="map" style="height:520px; color:black;"></div> 
+							<div id="map" style="height:520px; color:black;"></div>
 							<div id="sidebar" style="width: 60%">
 								<div id="sidebarContent" style="display: none;">
 									<h1 style="color:black">Notifications</h1>
 								</div>
 							</div>
-							
+
 							<!-- Javascript for Leaflet Map and Sidebar-->
 							<script>
 								var x = document.getElementById("geoLocationResult");
@@ -202,37 +201,46 @@
 									var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
 										.bindPopup('Current location.')
 										.openPopup();
-									
+
 									var sidebar = L.control.sidebar('sidebar', {
-												position: 'left'
-											});
+										position: 'left'
+									});
 
-											map.addControl(sidebar);
-											setTimeout(function () {
-												sidebar.show();
-											}, 500);
+									map.addControl(sidebar);
+									setTimeout(function () {
+										sidebar.show();
+									}, 500);
 
-											sidebarContentElement.style.display = "block";
+									sidebarContentElement.style.display = "block";
 
 									//This function pulls all the Lat/Long data for license plates from our database and adds pins for each one on the Map.
-									$(document).ready(function() {
+									$(document).ready(function () {
 										$.ajax({
-										type: "GET",
-										url: "/markers",
-										success: function(response) {
-											//Creating a pin for each Lat/Long row in our database.
-											for (var i = 0; i < response.length; i++) {
-												var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
-              									marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
-												marker.addEventListener("click", function(){
-												sidebar.setContent(response[i].name)			
-													}, false)
+											type: "GET",
+											url: "/markers",
+											success: function (response) {
+												// Creating a pin and list item for each Lat/Long row in our database.
+												for (var i = 0; i < response.length; i++) {
+													// Creating a Leaflet marker and adding it to the map
+													var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
+													marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
+
+													// Creating a list item for the marker and adding it to the list
+													var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <b>Lat:</b> ' + response[i].lat + ' <b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
+													listItem.data('marker', marker);
+
+													// Adding a click event listener to the list item that zooms to the marker location when clicked
+													listItem.click(function () {
+														var marker = $(this).data('marker');
+														map.flyTo(marker.getLatLng(), 16); //zoom level is set to 16
+														marker.openPopup(); //open the popup associated with the marker
+													});
 												}
 											}
 										});
 									});
 								}
-							
+
 							</script>
 						</div>
 					</section>
@@ -283,6 +291,8 @@
 
 
 				<!-- Footer -->
+				<ul id="markerList"></ul>
+
 				<section id="footer">
 				</section>
 	</div>
@@ -310,16 +320,16 @@
          		 });
        			 });
 			</script>
-	<!--Javascript for alerts-->		
+	<!--Javascript for alerts-->
 	<script>
-		
+
 		var b = "{{my_string}}";
 		if (b == "red") {
 			document.getElementById("1748").style.backgroundColor = 'red';
 			document.getElementById("1748").style.padding = '20px';
 			document.getElementById("1748").style.color = 'black';
 			document.getElementById("1748").style.marginBottom = '15px';
-			document.getElementById("1748").style.borderRadius= '15px';
+			document.getElementById("1748").style.borderRadius = '15px';
 			$('.alert').show();
 		}
 		if (b == "yellow") {
@@ -327,7 +337,7 @@
 			document.getElementById("1748").style.padding = '20px';
 			document.getElementById("1748").style.color = 'black';
 			document.getElementById("1748").style.marginBottom = '15px';
-			document.getElementById("1748").style.borderRadius= '15px';
+			document.getElementById("1748").style.borderRadius = '15px';
 			$('.alert').show();
 		}
 		if (b == null) {
@@ -335,13 +345,13 @@
 			document.getElementById("1748").style.padding = '20px';
 			document.getElementById("1748").style.color = 'black';
 			document.getElementById("1748").style.marginBottom = '15px';
-			document.getElementById("1748").style.borderRadius= '15px';
+			document.getElementById("1748").style.borderRadius = '15px';
 			$('.alert').show();
 		}
-		
+
 
 	</script>
-	
+
 </body>
 
 </html>
