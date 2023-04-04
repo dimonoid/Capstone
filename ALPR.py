@@ -11,7 +11,7 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 garbage_words_list = ['ontario', 'to', 'discover', 'mar']
-known_plates = ["CJTJ983", "1693212"]
+known_plates = ["CJTJ983", "1693212", "1088013", "76472"]
 
 
 def readLP(frame):
@@ -127,7 +127,6 @@ def readLP2(image_input, angle=30, step=2):
 
     dict_of_possible_plates = {}
     dict_of_return_matches = {}
-    threads = []
 
     def th(crop, angle_trial, j):
         crop_rotated = rotate_image(crop, angle_trial)
@@ -155,6 +154,7 @@ def readLP2(image_input, angle=30, step=2):
 
             # display_image(crop)
 
+            threads = []
             for j, angle_trial in enumerate(range(-angle, angle + 1, step)):
                 t = threading.Thread(target=th, args=(crop, angle_trial, j))
                 t.start()
@@ -169,6 +169,8 @@ def readLP2(image_input, angle=30, step=2):
         # if no license plates detected, try to recognize text on the whole image
         image_input_clean_copy = cv2.resize(image_input_clean_copy, (0, 0), fx=0.25, fy=0.25)
         # display_image(image_input_clean_copy)
+
+        threads = []
         for j, angle_trial in enumerate(range(-angle, angle + 1, step)):
             t = threading.Thread(target=th, args=(image_input_clean_copy, angle_trial, j))
             t.start()
@@ -194,6 +196,10 @@ def readLP2(image_input, angle=30, step=2):
     list_return_matches.sort(key=lambda x: len(x), reverse=True)
     print(list_return_matches)
     # display_image(image_input)
+
+    if len(list_return_matches) > 0:
+        cv2.putText(image_input, list_return_matches[0], (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 5)
+
     return list_return_matches, image_input
 
 
