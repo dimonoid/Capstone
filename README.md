@@ -25,6 +25,7 @@ Mohammad Osama – 8770948
 * `pip3 install Flask`
 * `pip3 install dlib`
 * `pip3 install opencv-python`
+* `pip3 install opencv-contrib-python` // for CPU only execution, without GPU
 * `pip3 install face-recognition`
 * `pip3 install Flask Flask-SQLAlchemy`
 * `pip3 install Flask-Reuploaded`

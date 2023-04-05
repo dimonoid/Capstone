@@ -9,9 +9,9 @@
     <title></title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
     <noscript>
-        <link rel="stylesheet" href="{{url_for('static', filename='css/noscript.css')}}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/>
     </noscript>
 </head>
 <body class="is-preload">
@@ -106,13 +106,15 @@
                 <p>We have a few functions.....</p>
                 <section class="features">
                     <article>
-                        <a href="#" class="image"><img src="{{url_for('static', filename='images/pic04.jpg')}}" alt=""/></a>
+                        <a href="#" class="image"><img src="{{ url_for('static', filename='images/pic04.jpg') }}"
+                                                       alt=""/></a>
                         <h3 class="major">License Plate Detection</h3>
                         <p>Live tracking License plate and displaying car information</p>
                         <a href="{{ url_for('lpPage') }}" class="special">Learn more</a>
                     </article>
                     <article>
-                        <a href="#" class="image"><img src="{{url_for('static', filename='images/pic05.jpg')}}" alt=""/></a>
+                        <a href="#" class="image"><img src="{{ url_for('static', filename='images/pic05.jpg') }}"
+                                                       alt=""/></a>
                         <h3 class="major">Facial Recognition</h3>
                         <p>Live tracking faces in view, actively detecting criminals</p>
                         <a href="{{ url_for('fPage') }}" class="special">Learn more</a>
@@ -182,12 +184,12 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/jquery.scrollex.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/browser.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/breakpoints.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/util.js')}}"></script>
-<script src="{{url_for('static', filename='js/main.js')}}"></script>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.scrollex.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/util.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
 </html>
