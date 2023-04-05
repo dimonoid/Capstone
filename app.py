@@ -12,7 +12,6 @@ from wtforms import SubmitField
 from threading import Thread
 
 from ALPR import *
-from currentLocation import *
 from dbFunc import *
 from dbFunctions import find_lp_owner
 
@@ -191,7 +190,7 @@ def lpPage():
     else:
         file_url = None
     my_string = ""
-    return render_template('lpPage.html', displayGpsResult=displayL(), form=form, file_url=file_url,
+    return render_template('lpPage.html', form=form, file_url=file_url,
                            display_lpResult=display_lpResult, display_oResult=display_oResult, display_iResult=display_iResult,
                            display_cResult=display_cResult,
                             my_string=display_cResult)
@@ -224,11 +223,6 @@ def updateAccuracy():
     return str(percent_accuracy) + "%"
 
 
-@app.route("/displayLocation")
-def displayLocation():
-    displayGpsResult = str(getLocation())
-    return displayGpsResult
-
 @app.route('/markers')
 def get_markers_data():
     conn = sqlite3.connect('Database.db')
@@ -245,6 +239,29 @@ def get_markers_data():
         })
     return jsonify(markers)
 
+@app.route('/insert_marker', methods=['POST'])
+def insert_marker():
+    data = request.get_json()
+    name = data['name']
+    latitude = data['latitude']
+    longitude = data['longitude']
+    
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM markers WHERE name=?", (name,))
+    existing_marker = c.fetchone()
+    
+    if existing_marker is None:
+        c.execute("INSERT INTO markers (name, latitude, longitude) VALUES (?, ?, ?)", (name, latitude, longitude))
+        conn.commit()
+        response = {'status': 'success'}
+    else:
+        response = {'status': 'error', 'message': 'Marker with this name already exists'}
+        
+    conn.close()
+    
+    return jsonify(response)
+
 @app.route('/send-text', methods=['POST'])
 def send_text():
     phone_number = '+16135014983'
@@ -253,6 +270,25 @@ def send_text():
         Message='Hello from AWS SNS!'
     )
     return jsonify({'message': 'Text message sent!'})
+
+
+@app.route('/criminals')
+def get_criminals_data():
+    conn = sqlite3.connect('Database.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM Criminals')
+    data = c.fetchall()
+    conn.close()
+    criminals = []
+    for item in data:
+        criminals.append({
+            'Name': item[0],
+            'Crime': item[1],
+            'Color': item[2]
+        })
+    return jsonify(criminals)
+
+
 
 def test1():
     """All results are unknown means very low false positives, what is good result"""
