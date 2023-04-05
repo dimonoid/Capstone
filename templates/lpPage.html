@@ -242,6 +242,59 @@
                                     }
                                 });
                             });
+
+									//Fetch names of all the people in Criminals table
+									function fetchCriminals(){
+										return $.ajax({
+											url: "/criminals"
+										});
+									}
+
+									//Fetch names of all the people in Criminals table
+									function fetchMarkers(){
+										return $.ajax({
+											url: "/markers"
+										});
+									}
+
+
+									//Fetch function for getting the name of face detected.
+									function fetchNameData() {
+									$.ajax({
+										url: "/currentName",
+										type: "GET",
+										success: function(response) {
+										var promise = fetchCriminals();
+										promise.done(function(data) {
+											for (var i = 0; i < data.length; i++) {
+												if(response == data[i].Name)
+												{
+													//Insert a marker for data[i].Name
+													var data = {'latitude': currentLat, 'longitude': currentLong, 'name': data[i].Name};
+													$.ajax({
+														type: 'POST',
+														url: '/insert_marker',
+														data: JSON.stringify(data),
+														contentType: 'application/json',
+														success: function(response) {
+															console.log('Marker inserted successfully');
+														},
+														error: function(xhr, status, error) {
+															console.error('Error inserting marker:', error);
+														}
+													});
+												}
+											}
+										});
+										}
+									});
+									}
+
+									//Call the fetch function every 5 seconds
+									$(document).ready(function () {
+										setInterval(fetchNameData,5000);
+									});
+
                         }
 
                     </script>
