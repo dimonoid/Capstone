@@ -49,7 +49,7 @@ def find_lp_owner(inputPlate, cur):
 # add License Plate to database
 def add_plate(LicensePlate, Owner, Info, Colour):
     try:
-        con = sql.connect('Database.db')
+        con = sqlite3.connect('Database.db')
         c = con.cursor()
         c.execute(
             "INSERT INTO LicensePlate (LicensePlate, Owner, Info, Colour) VALUES (%s, %s, %s, %s)" % (LicensePlate, Owner, Info, Colour))
@@ -60,7 +60,7 @@ def add_plate(LicensePlate, Owner, Info, Colour):
 # add Face to database
 def add_face(Name, Crime, Colour):
     try:
-        con = sql.connect('Database.db')
+        con = sqlite3.connect('Database.db')
         c = con.cursor()
         c.execute("INSERT INTO Criminals (Name, Crime, Colour) VALUES (%s, %s, %s)" % (Name, Crime, Colour))
         con.commit()
