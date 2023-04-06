@@ -1,12 +1,11 @@
 import glob
 
 import face_recognition
-from flask import send_from_directory, Flask
+from flask import send_from_directory
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
-import sqlite3
 
 from ALPR import *
 from currentLocation import *
@@ -197,16 +196,17 @@ def lpPage():
             display_oResult = dbQuery['Owner']
             display_iResult = dbQuery['Info']
             display_cResult = dbQuery['Colour']
-            if(display_cResult == "red"):
-                #Add text functionality here
-                return
+            # if(display_cResult == "red"):
+            #        t = Thread(target=buzz_for_5_seconds)
+            #        t.start()
+
+        # Close connection to database
+        con.close()
 
         print("Uploaded file: " + filename)  # Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
     my_string = ""
-    # Close connection to database
-    con.close()
     return render_template('lpPage.html',
                            displayGpsResult=displayL(),
                            form=form,
