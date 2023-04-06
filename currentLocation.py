@@ -1,6 +1,6 @@
 from time import sleep
+
 from geopy.geocoders import Nominatim
-from random import randrange
 
 geoLoc = Nominatim(user_agent="GetLoc")
 

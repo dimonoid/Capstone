@@ -1,0 +1,26 @@
+<annotation>
+	<folder>images</folder>
+	<filename>6.jpg</filename>
+	<path>C:\Users\achraf_k\Desktop\achraf\ANPR\images\6.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1024</width>
+		<height>754</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>LP</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>428</xmin>
+			<ymin>622</ymin>
+			<xmax>612</xmax>
+			<ymax>676</ymax>
+		</bndbox>
+	</object>
+</annotation>
