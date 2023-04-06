@@ -1,7 +1,14 @@
-from os import walk
-
+from json import detect_encoding
+from flask import Flask, render_template, Response, flash
+import cv2
 import face_recognition
+import numpy as np
+
+import pickle
+import urllib
 import requests
+
+from os import walk
 
 
 # Get a reference to webcam #0 (the default one)
