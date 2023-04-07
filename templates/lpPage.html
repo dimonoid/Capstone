@@ -226,7 +226,7 @@
 													marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
 
 													// Creating a list item for the marker and adding it to the list
-													var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <b>Lat:</b> ' + response[i].lat + ' <b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
+													var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <br><b>Lat:</b>' + response[i].lat + ' <br><b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
 													listItem.data('marker', marker);
 
 													// Adding a click event listener to the list item that zooms to the marker location when clicked
@@ -241,14 +241,14 @@
 									});
 
 									//Fetch names of all the people in Criminals table
-									function fetchCriminals(){
+									function fetchCriminals() {
 										return $.ajax({
 											url: "/criminals"
 										});
 									}
 
 									//Fetch names of all the people in Criminals table
-									function fetchMarkers(){
+									function fetchMarkers() {
 										return $.ajax({
 											url: "/markers"
 										});
@@ -257,41 +257,40 @@
 
 									//Fetch function for getting the name of face detected.
 									function fetchNameData() {
-									$.ajax({
-										url: "/currentName",
-										type: "GET",
-										success: function(response) {
-										var promise = fetchCriminals();
-										promise.done(function(data) {
-											for (var i = 0; i < data.length; i++) {
-												if(response == data[i].Name)
-												{
-													//Insert a marker for data[i].Name
-													var data = {'latitude': currentLat, 'longitude': currentLong, 'name': data[i].Name};                
-													$.ajax({
-														type: 'POST',
-														url: '/insert_marker',
-														data: JSON.stringify(data),
-														contentType: 'application/json',
-														success: function(response) {
-															console.log('Marker inserted successfully');
-														},
-														error: function(xhr, status, error) {
-															console.error('Error inserting marker:', error);
+										$.ajax({
+											url: "/currentName",
+											type: "GET",
+											success: function (response) {
+												var promise = fetchCriminals();
+												promise.done(function (data) {
+													for (var i = 0; i < data.length; i++) {
+														if (response == data[i].Name) {
+															//Insert a marker for data[i].Name
+															var data = { 'latitude': currentLat, 'longitude': currentLong, 'name': data[i].Name };
+															$.ajax({
+																type: 'POST',
+																url: '/insert_marker',
+																data: JSON.stringify(data),
+																contentType: 'application/json',
+																success: function (response) {
+																	console.log('Marker inserted successfully');
+																},
+																error: function (xhr, status, error) {
+																	console.error('Error inserting marker:', error);
+																}
+															});
 														}
-													});
-												}
+													}
+												});
 											}
 										});
-										}
-									});
 									}
 
 									//Call the fetch function every 5 seconds
 									$(document).ready(function () {
-										setInterval(fetchNameData,5000);
+										setInterval(fetchNameData, 5000);
 									});
-									
+
 								}
 
 							</script>
@@ -345,7 +344,33 @@
 
 				<!-- Footer -->
 				<ul id="markerList"></ul>
+				<style>
+					#markerList ul{
+					  width: 640px; /* set the width to 640 pixels */
+					  list-style: none;
+					  padding: 0;
+					  margin: 0;
+					}
+					#markerList li {
+					  display: inline-block;
+					  width: 200px;
+					  text-align: left;
+					  margin-right: 10px;
+					  margin-bottom: 10px;
+					  margin-top: 10px;
+					  padding: 10px;
+					  background-color: #0e418d;
+					  border: 1px solid #ccc;
+					  border-radius: 5px;
+					  
 
+					}
+					#markerList li b {
+					  display: inline-block;
+					  width: 60px;
+					  text-align: left;
+					}
+				  </style>
 				<button id="send-text" data-phone-number="+16135104983">Send Text</button>
 
 
@@ -409,15 +434,15 @@
 
 	</script>
 	<script>
-		document.getElementById("send-text").addEventListener("click", function() {
-		  var phoneNumber = document.getElementById("send-text").dataset.phoneNumber;
-		  var xhr = new XMLHttpRequest();
-		  xhr.open("POST", "/send-text");
-		  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-		  xhr.send(JSON.stringify({"phone_number": phoneNumber}));
+		document.getElementById("send-text").addEventListener("click", function () {
+			var phoneNumber = document.getElementById("send-text").dataset.phoneNumber;
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/send-text");
+			xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			xhr.send(JSON.stringify({ "phone_number": phoneNumber }));
 		});
-		</script>
-		
+	</script>
+
 
 </body>
 
