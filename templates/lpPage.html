@@ -7,446 +7,441 @@
 <html>
 
 <head>
-    <title>LP Page</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
-    <noscript>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/>
-    </noscript>
+	<title>LP Page</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" />
+	<noscript>
+		<link rel="stylesheet" href="{{url_for('static', filename='css/noscript.css')}}" />
+	</noscript>
 
-    <!--Leaflet JS & CSS-->
-    <!-- from https://unpkg.com/leaflet@1.9.3/dist/leaflet.css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet.css') }}"
-          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
-    <!-- from https://unpkg.com/leaflet@1.9.3/dist/leaflet.js -->
-    <script src="{{ url_for('static', filename='js/leaflet.js') }}"
-            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-    <!-- from https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css -->
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/L.Control.Sidebar.css') }}"/>
-    <!-- from https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js -->
-    <script src="{{ url_for('static', filename='js/L.Control.Sidebar.js') }}"></script>
+	<!--Leaflet JS & CSS-->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+		integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+		integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+	<link type="text/css" rel="stylesheet" href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css" />
+	<script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"></script>
 </head>
 
 <body class="is-preload" onload="getLocation()">
 
-<!-- Page Wrapper -->
-<div id="page-wrapper">
+	<!-- Page Wrapper -->
+	<div id="page-wrapper">
 
-    <!-- Header -->
-    <header id="header">
-        <h1><a href="{{ url_for('index') }}">CrimaVision</a></h1>
-        <nav>
-            <a href="#menu">Menu</a>
-        </nav>
-    </header>
+		<!-- Header -->
+		<header id="header">
+			<h1><a href="{{ url_for('index') }}">CrimaVision</a></h1>
+			<nav>
+				<a href="#menu">Menu</a>
+			</nav>
+		</header>
 
-    <!-- Menu -->
-    <nav id="menu">
-        <div class="inner">
-            <h2>Menu</h2>
-            <ul class="links">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('lpPage') }}">License Plate Recognition</a></li>
-                <li><a href="{{ url_for('fPage') }}">Facial Recognition</a></li>
-                <li><a href="#">Log In</a></li>
-                <li><a href="#">Sign Up</a></li>
-            </ul>
-            <a href="#" class="close">Close</a>
-        </div>
-    </nav>
+		<!-- Menu -->
+		<nav id="menu">
+			<div class="inner">
+				<h2>Menu</h2>
+				<ul class="links">
+					<li><a href="{{ url_for('index') }}">Home</a></li>
+					<li><a href="{{ url_for('lpPage') }}">License Plate Recognition</a></li>
+					<li><a href="{{ url_for('fPage') }}">Facial Recognition</a></li>
+					<li><a href="#">Log In</a></li>
+					<li><a href="#">Sign Up</a></li>
+				</ul>
+				<a href="#" class="close">Close</a>
+			</div>
+		</nav>
 
-    <!-- Wrapper -->
-    <section id="wrapper">
-        <header>
-        </header>
-        <div class="inner">
-            <div class="inner">
-                <h2>Live Camera Feed</h2>
-                <!-- <h2 class="mt-5">Live Stream</h2> -->
-                <img src="{{ url_for('video_feed') }}" width="500" height="300">
+		<!-- Wrapper -->
+		<section id="wrapper">
+			<header>
+				<div class="inner">
+					<div class="inner">
+						<h2>Live Camera Feed</h2>
+						<!-- <h2 class="mt-5">Live Stream</h2> -->
+						<img src="{{ url_for('video_feed') }}" width="500" height="300">
 
-            </div>
-            <!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
-                <label for="file">Upload</label>
-                <form method="post" enctype="multipart/form-data">
-                    {{ form.hidden_tag() }}
+					</div>
+					<!-- <input type="file" accept="image/*" name="image" id="file" style="display: none">
+					<label for="file">Upload</label>
+					<form method="post" enctype="multipart/form-data">
+						{{ form.hidden_tag() }}
 
-                    {% for error in form.photo.errors %}
-                    <span style="color: red;">{{ error }}</span>
-                    {% endfor %}
-                    <ul class="actions fit">
-                        <li><a href="#" class="button fit">{{ form.photo() }}</a></li>
-                        <li><a href="#" id="pbutton" class="button primary">{{ form.submit(class="button primary")
-                                }}</a></li>
-                    </ul>
-                    <div>
-                        {% if file_url %}
-                        <div>
-                            <img src="{{ file_url }}" style="width: 400px;">
-                        </div>
-                        {% endif %}
-                    </div>
-                </form> -->
-            <div class="inner">
-                <ul class="actions">
+						{% for error in form.photo.errors %}
+						<span style="color: red;">{{ error }}</span>
+						{% endfor %}
+						<ul class="actions fit">
+							<li><a href="#" class="button fit">{{ form.photo() }}</a></li>
+							<li><a href="#" id="pbutton" class="button primary">{{ form.submit(class="button primary")
+									}}</a></li>
+						</ul>
+						<div>
+							{% if file_url %}
+							<div>
+								<img src="{{ file_url }}" style="width: 400px;">
+							</div>
+							{% endif %}
+						</div>
+					</form> -->
+					<div class="inner">
+						<ul class="actions">
 
-                    <li>
-                        <!-- <p> Detected license plate : <b>{{ display_lpResult }}</b>
-                                <br> Owner : <b>{{ display_oResult }}</b>
-                                <br> Information : <b>{{ display_iResult }}</b>
-                                <br> Threat: <b id="cresult"> {{display_cResult}}</b> -->
+							<li>
+								<!-- <p> Detected license plate : <b>{{ display_lpResult }}</b>
+									<br> Owner : <b>{{ display_oResult }}</b>
+									<br> Information : <b>{{ display_iResult }}</b>
+									<br> Threat: <b id="cresult"> {{display_cResult}}</b> -->
 
-                        <!-- Style for alerts -->
-                        <style>
-                            .alert {
-                                display: none;
-                                opacity: 1;
-                                transition: opacity 1s ease;
+								<!-- Style for alerts -->
+								<style>
+									.alert {
+										display: none;
+										opacity: 1;
+										transition: opacity 1s ease;
 
-                            }
+									}
 
-                            .alert:hover {
-                                opacity: 0.5;
+									.alert:hover {
+										opacity: 0.5;
 
-                            }
+									}
 
 
-                            .closebtn {
-                                margin-left: 15px;
-                                color: white;
-                                font-weight: bold;
-                                float: right;
-                                font-size: 22px;
-                                line-height: 20px;
-                                cursor: pointer;
-                                transition: 0.3s;
+									.closebtn {
+										margin-left: 15px;
+										color: white;
+										font-weight: bold;
+										float: right;
+										font-size: 22px;
+										line-height: 20px;
+										cursor: pointer;
+										transition: 0.3s;
 
-                            }
+									}
 
-                            .closebtn:hover {
-                                color: rgb(0, 0, 0);
-                            }
-                        </style>
-                        <!-- HTML for alerts-->
-                        <div class="alert" id="1748">
+									.closebtn:hover {
+										color: rgb(0, 0, 0);
+									}
+								</style>
+								<!-- HTML for alerts-->
+								<div class="alert" id="1748">
 									<span id="closedbtn" class="closebtn"
-                                          onclick="this.parentElement.style.display='none';">&times; </span>
-                            New Car Detected.
-                        </div>
-                        </p>
-                    </li>
-                </ul>
-            </div>
-            <section>
-                <h3 class="major">Crime Map</h3>
-                <div class="inner">
+										onclick="this.parentElement.style.display='none';">&times; </span>
+									New Car Detected.
+								</div>
+								</p>
+							</li>
+						</ul>
+					</div>
+					<section>
+						<h3 class="major">Crime Map</h3>
+						<div class="inner">
 
-                    <p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
-                    <p id="geoLocationAddress" style="margin-left: 15px;"></p>
+							<p id="geoLocationResult" style="margin-top: 15px; margin-left: 15px;"></p>
+							<p id="geoLocationAddress" style="margin-left: 15px;"></p>
 
-                    <!-- Map UI and Sidebar UI-->
-                    <div id="map" style="height:520px; color:black;"></div>
-                    <div id="sidebar" style="width: 60%">
-                        <div id="sidebarContent" style="display: none;">
-                            <h1 style="color:black">Notifications</h1>
-                        </div>
-                    </div>
+							<!-- Map UI and Sidebar UI-->
+							<div id="map" style="height:520px; color:black;"></div>
+							<div id="sidebar" style="width: 60%">
+								<div id="sidebarContent" style="display: none;">
+									<h1 style="color:black">Notifications</h1>
+								</div>
+							</div>
 
-                    <!-- Javascript for Leaflet Map and Sidebar-->
-                    <script>
-                        var x = document.getElementById("geoLocationResult");
-                        var y = document.getElementById("geoLocationAddress");
+							<!-- Javascript for Leaflet Map and Sidebar-->
+							<script>
+								var x = document.getElementById("geoLocationResult");
+								var y = document.getElementById("geoLocationAddress");
 
-                        var sidebarContentElement = document.getElementById("sidebarContent");
-                        var sidebarElement = document.getElementById("sidebar");
+								var sidebarContentElement = document.getElementById("sidebarContent");
+								var sidebarElement = document.getElementById("sidebar");
 
-                        function getLocation() {
-                            if (navigator.geolocation) {
-                                navigator.geolocation.getCurrentPosition(showPosition);
-                            } else {
-                                x.innerHTML = "Geolocation is not supported by this browser.";
-                            }
-                        }
+								function getLocation() {
+									if (navigator.geolocation) {
+										navigator.geolocation.getCurrentPosition(showPosition);
+									} else {
+										x.innerHTML = "Geolocation is not supported by this browser.";
+									}
+								}
 
-                        function showPosition(position) {
-                            //Obtain current [longitude, latitude] from API
-                            var currentLong = position.coords.longitude;
-                            var currentLat = position.coords.latitude;
+								function showPosition(position) {
+									//Obtain current [longitude, latitude] from API
+									var currentLong = position.coords.longitude;
+									var currentLat = position.coords.latitude;
 
-                            //Reverse Geocoding (Coords --> Address)
-                            var requestOptions = {
-                                method: 'GET',
-                            };
+									//Reverse Geocoding (Coords --> Address)
+									var requestOptions = {
+										method: 'GET',
+									};
 
-                            var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon=' + currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
+									var reverseString = 'https://api.geoapify.com/v1/geocode/reverse?lat=' + currentLat + '&lon=' + currentLong + '&apiKey=cc4fed27d2764f9fb268f29c19c73959';
 
-                            fetch(reverseString).then(result => result.json())
-                                .then(featureCollection => {
-                                    if (featureCollection.features.length === 0) {
-                                        document.getElementById("status").textContent = "The address is not found";
-                                        return;
-                                    }
-                                    const foundAddress = featureCollection.features[0];
-                                    console.log(foundAddress.properties);
-                                    console.log(foundAddress.properties.address_line1);
-                                    y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
-                                });
-
-
-                            x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>";
-
-                            //Javascript for the Leaflet map
-                            var map = L.map('map', {center: [currentLat, currentLong], zoom: 19});
-                            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                                maxZoom: 19,
-                                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                            }).addTo(map)
-
-                            var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
-                                .bindPopup('Current location.')
-                                .openPopup();
-
-                            var sidebar = L.control.sidebar('sidebar', {
-                                position: 'left'
-                            });
-
-                            map.addControl(sidebar);
-                            setTimeout(function () {
-                                sidebar.show();
-                            }, 500);
-
-                            sidebarContentElement.style.display = "block";
-
-                            //This function pulls all the Lat/Long data for license plates from our database and adds pins for each one on the Map.
-                            $(document).ready(function () {
-                                $.ajax({
-                                    type: "GET",
-                                    url: "/markers",
-                                    success: function (response) {
-                                        // Creating a pin and list item for each Lat/Long row in our database.
-                                        for (var i = 0; i < response.length; i++) {
-                                            // Creating a Leaflet marker and adding it to the map
-                                            var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
-                                            marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
-
-                                            // Creating a list item for the marker and adding it to the list
-                                            var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <br><b>Lat:</b> ' + response[i].lat + '<br> <b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
-                                            listItem.data('marker', marker);
-
-                                            // Adding a click event listener to the list item that zooms to the marker location when clicked
-                                            listItem.click(function () {
-                                                var marker = $(this).data('marker');
-                                                map.flyTo(marker.getLatLng(), 16); //zoom level is set to 16
-                                                marker.openPopup(); //open the popup associated with the marker
-                                            });
-                                        }
-                                    }
-                                });
-                            });
-
-                            //Fetch names of all the people in Criminals table
-                            function fetchCriminals() {
-                                return $.ajax({
-                                    url: "/criminals"
-                                });
-                            }
-
-                            //Fetch names of all the people in Criminals table
-                            function fetchMarkers() {
-                                return $.ajax({
-                                    url: "/markers"
-                                });
-                            }
+									fetch(reverseString).then(result => result.json())
+										.then(featureCollection => {
+											if (featureCollection.features.length === 0) {
+												document.getElementById("status").textContent = "The address is not found";
+												return;
+											}
+											const foundAddress = featureCollection.features[0];
+											console.log(foundAddress.properties);
+											console.log(foundAddress.properties.address_line1);
+											y.innerHTML = "<b>Current location:</b> " + foundAddress.properties.address_line1 + ", " + foundAddress.properties.address_line2;
+										});
 
 
-                            //Fetch function for getting the name of face detected.
-                            function fetchNameData() {
-                                $.ajax({
-                                    url: "/currentName",
-                                    type: "GET",
-                                    success: function (response) {
-                                        var promise = fetchCriminals();
-                                        promise.done(function (data) {
-                                            for (var i = 0; i < data.length; i++) {
-                                                if (response == data[i].Name) {
-                                                    //Insert a marker for data[i].Name
-                                                    var data = {
-                                                        'latitude': currentLat,
-                                                        'longitude': currentLong,
-                                                        'name': data[i].Name
-                                                    };
-                                                    $.ajax({
-                                                        type: 'POST',
-                                                        url: '/insert_marker',
-                                                        data: JSON.stringify(data),
-                                                        contentType: 'application/json',
-                                                        success: function (response) {
-                                                            console.log('Marker inserted successfully');
-                                                        },
-                                                        error: function (xhr, status, error) {
-                                                            console.error('Error inserting marker:', error);
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            }
+									x.innerHTML = "<b>Latitude:</b> " + currentLat + ", <b>Longitude:</b> " + currentLong + "<br>";
 
-                            //Call the fetch function every 5 seconds
-                            $(document).ready(function () {
-                                setInterval(fetchNameData, 5000);
-                            });
+									//Javascript for the Leaflet map
+									var map = L.map('map', { center: [currentLat, currentLong], zoom: 19 });
+									L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+										maxZoom: 19,
+										attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+									}).addTo(map)
 
-                        }
+									var currentLocationMarker = L.marker([currentLat, currentLong]).addTo(map)
+										.bindPopup('Current location.')
+										.openPopup();
 
-                    </script>
-                </div>
-            </section>
-        </div>
-        <!-- Potential future feature (List of active incidents)
+									var sidebar = L.control.sidebar('sidebar', {
+										position: 'left'
+									});
 
-            <div class="inner">
-                <br><br>
-                <h3 class="major">Active incidents</h3>
-                <table>
-                    <tr>
-                      <th>Incident</th>
-                      <th>Location</th>
-                      <th>Status</th>
-                    </tr>
+									map.addControl(sidebar);
+									setTimeout(function () {
+										sidebar.show();
+									}, 500);
 
-                    <tr>
-                      <td>Theft</td>
-                      <td>[45.390731, -75.744219]</td>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <td>Centro comercial Moctezuma</td>
-                      <td>Francisco Chang</td>
-                      <td>Officer at location</td>
-                    </tr>
-                    <tr>
-                        <td>Centro comercial Moctezuma</td>
-                        <td>Francisco Chang</td>
-                        <td>Mexico</td>
-                    </tr>
-                    <tr>
-                        <td>Centro comercial Moctezuma</td>
-                        <td>Francisco Chang</td>
-                        <td>Mexico</td>
-                    </tr>
-                    <tr>
-                        <td>Centro comercial Moctezuma</td>
-                        <td>Francisco Chang</td>
-                        <td>Mexico</td>
-                    </tr>
-                  </table>
-            </div>
-        </header>
-    </section>
-    -->
+									sidebarContentElement.style.display = "block";
 
-        <!-- Footer -->
-        <ul id="markerList"></ul>
-        <style>
-            #markerList ul {
-                width: 640px; /* set the width to 640 pixels */
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
+									//This function pulls all the Lat/Long data for license plates from our database and adds pins for each one on the Map.
+									$(document).ready(function () {
+										$.ajax({
+											type: "GET",
+											url: "/markers",
+											success: function (response) {
+												// Creating a pin and list item for each Lat/Long row in our database.
+												for (var i = 0; i < response.length; i++) {
+													// Creating a Leaflet marker and adding it to the map
+													var marker = L.marker([response[i].lat, response[i].lng]).addTo(map);
+													marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
 
-            #markerList li {
-                display: inline-block;
-                width: 200px;
-                text-align: left;
-                margin-right: 10px;
-                margin-bottom: 10px;
-                margin-top: 10px;
-                padding: 10px;
-                background-color: #0e418d;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-            }
+													// Creating a list item for the marker and adding it to the list
+													var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <br><b>Lat:</b>' + response[i].lat + ' <br><b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
+													listItem.data('marker', marker);
 
-            #markerList li b {
-                display: inline-block;
-                width: 60px;
-                text-align: left;
-            }
-        </style>
+													// Adding a click event listener to the list item that zooms to the marker location when clicked
+													listItem.click(function () {
+														var marker = $(this).data('marker');
+														map.flyTo(marker.getLatLng(), 16); //zoom level is set to 16
+														marker.openPopup(); //open the popup associated with the marker
+													});
+												}
+											}
+										});
+									});
 
-        <button id="send-text" data-phone-number="+16135104983">Send Text</button>
+									//Fetch names of all the people in Criminals table
+									function fetchCriminals() {
+										return $.ajax({
+											url: "/criminals"
+										});
+									}
+
+									//Fetch names of all the people in Criminals table
+									function fetchMarkers() {
+										return $.ajax({
+											url: "/markers"
+										});
+									}
 
 
-        <section id="footer">
-        </section>
-</div>
+									//Fetch function for getting the name of face detected.
+									function fetchNameData() {
+										$.ajax({
+											url: "/currentName",
+											type: "GET",
+											success: function (response) {
+												var promise = fetchCriminals();
+												promise.done(function (data) {
+													for (var i = 0; i < data.length; i++) {
+														if (response == data[i].Name) {
+															//Insert a marker for data[i].Name
+															var data = { 'latitude': currentLat, 'longitude': currentLong, 'name': data[i].Name };
+															$.ajax({
+																type: 'POST',
+																url: '/insert_marker',
+																data: JSON.stringify(data),
+																contentType: 'application/json',
+																success: function (response) {
+																	console.log('Marker inserted successfully');
+																},
+																error: function (xhr, status, error) {
+																	console.error('Error inserting marker:', error);
+																}
+															});
+														}
+													}
+												});
+											}
+										});
+									}
+
+									//Call the fetch function every 5 seconds
+									$(document).ready(function () {
+										setInterval(fetchNameData, 5000);
+									});
+
+								}
+
+							</script>
+						</div>
+					</section>
+				</div>
+				<!-- Potential future feature (List of active incidents)
+
+							<div class="inner">
+								<br><br>
+								<h3 class="major">Active incidents</h3>
+								<table>
+									<tr>
+									  <th>Incident</th>
+									  <th>Location</th>
+									  <th>Status</th>
+									</tr>
+									
+									<tr>
+									  <td>Theft</td>
+									  <td>[45.390731, -75.744219]</td>
+									  <td></td>
+									</tr>
+									<tr>
+									  <td>Centro comercial Moctezuma</td>
+									  <td>Francisco Chang</td>
+									  <td>Officer at location</td>
+									</tr>
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>  
+									<tr>
+										<td>Centro comercial Moctezuma</td>
+										<td>Francisco Chang</td>
+										<td>Mexico</td>
+									</tr>
+								  </table>
+							</div>
+						</header>
+					</section>
+					-->
 
 
-<!-- Scripts -->
-<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery.scrollex.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/util.js') }}"></script>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
-<script type=text/javascript>
-    $(function () {
-        $('a#test').on('click', function (e) {
-            e.preventDefault()
-            $.getJSON("/displayLocation",
-                function (data) {
-                    //do nothing
-                });
+
+				<!-- Footer -->
+				<ul id="markerList"></ul>
+				<style>
+					#markerList ul{
+					  width: 640px; /* set the width to 640 pixels */
+					  list-style: none;
+					  padding: 0;
+					  margin: 0;
+					}
+					#markerList li {
+					  display: inline-block;
+					  width: 200px;
+					  text-align: left;
+					  margin-right: 10px;
+					  margin-bottom: 10px;
+					  margin-top: 10px;
+					  padding: 10px;
+					  background-color: #0e418d;
+					  border: 1px solid #ccc;
+					  border-radius: 5px;
+					  
+
+					}
+					#markerList li b {
+					  display: inline-block;
+					  width: 60px;
+					  text-align: left;
+					}
+				  </style>
+				<button id="send-text" data-phone-number="+16135104983">Send Text</button>
+
+
+
+				<section id="footer">
+				</section>
+	</div>
+
+
+
+
+	<!-- Scripts -->
+	<script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/jquery.scrollex.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/browser.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/breakpoints.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/util.js')}}"></script>
+	<script src="{{url_for('static', filename='js/main.js')}}"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script type=text/javascript>
+      		  $(function() {
+         		 $('a#test').on('click', function(e) {
+           			 e.preventDefault()
+           			 $.getJSON("/displayLocation",
+              		  function(data) {
+             	 //do nothing
+            });
             return false;
-        });
-    });
-</script>
-<!--Javascript for alerts-->
-<script>
+         		 });
+       			 });
+			</script>
+	<!--Javascript for alerts-->
+	<script>
 
-    var b = "{{my_string}}";
-    if (b == "red") {
-        document.getElementById("1748").style.backgroundColor = 'red';
-        document.getElementById("1748").style.padding = '20px';
-        document.getElementById("1748").style.color = 'black';
-        document.getElementById("1748").style.marginBottom = '15px';
-        document.getElementById("1748").style.borderRadius = '15px';
-        $('.alert').show();
-    }
-    if (b == "yellow") {
-        document.getElementById("1748").style.backgroundColor = 'yellow';
-        document.getElementById("1748").style.padding = '20px';
-        document.getElementById("1748").style.color = 'black';
-        document.getElementById("1748").style.marginBottom = '15px';
-        document.getElementById("1748").style.borderRadius = '15px';
-        $('.alert').show();
-    }
-    if (b == null) {
-        document.getElementById("1748").style.backgroundColor = 'green';
-        document.getElementById("1748").style.padding = '20px';
-        document.getElementById("1748").style.color = 'black';
-        document.getElementById("1748").style.marginBottom = '15px';
-        document.getElementById("1748").style.borderRadius = '15px';
-        $('.alert').show();
-    }
+		var b = "{{my_string}}";
+		if (b == "red") {
+			document.getElementById("1748").style.backgroundColor = 'red';
+			document.getElementById("1748").style.padding = '20px';
+			document.getElementById("1748").style.color = 'black';
+			document.getElementById("1748").style.marginBottom = '15px';
+			document.getElementById("1748").style.borderRadius = '15px';
+			$('.alert').show();
+		}
+		if (b == "yellow") {
+			document.getElementById("1748").style.backgroundColor = 'yellow';
+			document.getElementById("1748").style.padding = '20px';
+			document.getElementById("1748").style.color = 'black';
+			document.getElementById("1748").style.marginBottom = '15px';
+			document.getElementById("1748").style.borderRadius = '15px';
+			$('.alert').show();
+		}
+		if (b == null) {
+			document.getElementById("1748").style.backgroundColor = 'green';
+			document.getElementById("1748").style.padding = '20px';
+			document.getElementById("1748").style.color = 'black';
+			document.getElementById("1748").style.marginBottom = '15px';
+			document.getElementById("1748").style.borderRadius = '15px';
+			$('.alert').show();
+		}
 
 
-</script>
-<script>
-    document.getElementById("send-text").addEventListener("click", function () {
-        var phoneNumber = document.getElementById("send-text").dataset.phoneNumber;
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/send-text");
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.send(JSON.stringify({"phone_number": phoneNumber}));
-    });
-</script>
+	</script>
+	<script>
+		document.getElementById("send-text").addEventListener("click", function () {
+			var phoneNumber = document.getElementById("send-text").dataset.phoneNumber;
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "/send-text");
+			xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			xhr.send(JSON.stringify({ "phone_number": phoneNumber }));
+		});
+	</script>
 
 
 </body>
