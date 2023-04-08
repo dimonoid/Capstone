@@ -58,6 +58,8 @@
 
     <!-- Wrapper -->
     <section id="wrapper">
+        <header>
+        </header>
         <div class="inner">
             <div class="inner">
                 <h2>Live Camera Feed</h2>
@@ -229,7 +231,7 @@
                                             marker.bindPopup("<b>Name:</b> " + response[i].name + "<br><b>Lat:</b> " + response[i].lat + "<br><b>Long:</b> " + response[i].lng);
 
                                             // Creating a list item for the marker and adding it to the list
-                                            var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <b>Lat:</b> ' + response[i].lat + ' <b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
+                                            var listItem = $('<li><b>Name:</b> ' + response[i].name + ' <br><b>Lat:</b> ' + response[i].lat + '<br> <b>Long:</b> ' + response[i].lng + '</li>').appendTo('#markerList');
                                             listItem.data('marker', marker);
 
                                             // Adding a click event listener to the list item that zooms to the marker location when clicked
@@ -347,16 +349,41 @@
     </section>
     -->
 
+        <!-- Footer -->
+        <ul id="markerList"></ul>
+        <style>
+            #markerList ul {
+                width: 640px; /* set the width to 640 pixels */
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
 
-    </section>
-    <!-- Footer -->
-    <ul id="markerList"></ul>
+            #markerList li {
+                display: inline-block;
+                width: 200px;
+                text-align: left;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                margin-top: 10px;
+                padding: 10px;
+                background-color: #0e418d;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
 
-    <button id="send-text" data-phone-number="+16135104983">Send Text</button>
+            #markerList li b {
+                display: inline-block;
+                width: 60px;
+                text-align: left;
+            }
+        </style>
+
+        <button id="send-text" data-phone-number="+16135104983">Send Text</button>
 
 
-    <section id="footer">
-    </section>
+        <section id="footer">
+        </section>
 </div>
 
 
