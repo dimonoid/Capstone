@@ -272,6 +272,7 @@ def get_markers_data():
         })
     return jsonify(markers)
 
+
 @app.route('/insert_marker', methods=['POST'])
 def insert_marker():
     data = request.get_json()
@@ -294,6 +295,7 @@ def insert_marker():
     conn.close()
 
     return jsonify(response)
+
 
 @app.route('/send-text', methods=['POST'])
 def send_text():
@@ -320,7 +322,6 @@ def get_criminals_data():
             'Color': item[2]
         })
     return jsonify(criminals)
-
 
 
 def test1():
