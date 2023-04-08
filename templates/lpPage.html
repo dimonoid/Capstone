@@ -15,21 +15,31 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/>
     </noscript>
 
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.scrollex.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/util.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
     <!--Leaflet JS & CSS-->
-    <!-- from https://unpkg.com/leaflet@1.9.3/dist/leaflet.css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet.css') }}"
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
           integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
           crossorigin=""/>
-    <!-- from https://unpkg.com/leaflet@1.9.3/dist/leaflet.js -->
-    <script src="{{ url_for('static', filename='js/leaflet.js') }}"
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
             integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
             crossorigin=""></script>
-    <!-- from https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css -->
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/L.Control.Sidebar.css') }}"
+
+    <link type="text/css"
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css"
           crossorigin=""/>
-    <!-- from https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js -->
-    <script src="{{ url_for('static', filename='js/L.Control.Sidebar.js') }}"
+    <script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"
             crossorigin=""></script>
+
 </head>
 
 <body class="is-preload" onload="getLocation()">
@@ -394,13 +404,6 @@
 </div>
 
 
-<!-- Scripts -->
-<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/jquery.scrollex.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/util.js') }}"></script>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
 <script type=text/javascript>
     $(function () {

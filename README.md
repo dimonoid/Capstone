@@ -52,4 +52,6 @@ To run the flask application: `python3 app.py`
 Useful links:
 
 https://github.com/Worm4047/Sockets-Exp
+https://github.com/Leaflet/Leaflet
+https://github.com/Turbo87/leaflet-sidebar
 
