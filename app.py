@@ -70,6 +70,13 @@ for i in range(len(images)):
 running = False
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico',
+                               mimetype='image/vnd.microsoft.icon')
+
+
 def gen_frames(debug=False, filename=None):
     global running
     """Generates facial predictions either from camera or local files"""
@@ -159,15 +166,9 @@ def gen_frames(debug=False, filename=None):
             break
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico',
-                               mimetype='image/vnd.microsoft.icon')
-
-
-def log_person():
-    return currentName
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/')
@@ -232,11 +233,6 @@ def fPage():
     return render_template('fPage.html',
                            displayName=currentName,
                            displayAccuracy=str(percent_accuracy) + " %")
-
-
-@app.route('/video_feed')
-def video_feed():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/uploads/<filename>')
