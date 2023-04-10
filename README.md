@@ -43,8 +43,9 @@ Install Tesseract OCR:
 * https://stackoverflow.com/questions/50951955/pytesseract-tesseractnotfound-error-tesseract-is-not-installed-or-its-not-i
 * https://github.com/UB-Mannheim/tesseract/wiki
 * `pip3 install pytesseract`
-* 
+
 Change path:
+
 * `pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'`
 
 To run the flask application: `python3 app.py`
@@ -54,4 +55,4 @@ Useful links:
 https://github.com/Worm4047/Sockets-Exp
 https://github.com/Leaflet/Leaflet
 https://github.com/Turbo87/leaflet-sidebar
-
+https://pyshine.com/Online-Video-Processing-From-Client-Camera/
