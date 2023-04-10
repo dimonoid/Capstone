@@ -43,12 +43,12 @@ class UploadForm(FlaskForm):
     submit = SubmitField('Upload')
 
 
-currentName = "?"
-percent_accuracy = "?"
-display_lpResult = ""
-display_oResult = ""
-display_iResult = ""
-display_cResult = ""
+currentName = "-"
+percent_accuracy = "-"
+display_lpResult = "-"
+display_oResult = "-"
+display_iResult = "-"
+display_cResult = "-"
 
 ### NOTE: All images must have the following format to loaded and read properly:  'name.jpg' ####
 
@@ -215,7 +215,6 @@ def lpPage():
         print("Uploaded file: " + filename)  # Variable 'filename' stores the name of the image selected, e.g. im4.png
     else:
         file_url = None
-    my_string = ""
     return render_template('lpPage.html',
                            form=form,
                            file_url=file_url,
@@ -271,6 +270,8 @@ def get_markers_data():
 
 @app.route('/insert_marker', methods=['POST'])
 def insert_marker():
+    print('inserting marker')
+
     data = request.get_json()
     name = data['name']
     latitude = data['latitude']
