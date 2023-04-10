@@ -14,32 +14,6 @@
     <noscript>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/noscript.css') }}"/>
     </noscript>
-
-    <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.scrollex.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/util.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-
-    <!--Leaflet JS & CSS-->
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-          crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-            crossorigin=""></script>
-
-    <link type="text/css"
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css"
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"
-            crossorigin=""></script>
-
 </head>
 
 <body class="is-preload" onload="getLocation()">
@@ -457,8 +431,31 @@
         xhr.send(JSON.stringify({"phone_number": phoneNumber}));
     });
 </script>
-
-
 </body>
 
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.scrollex.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/browser.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/breakpoints.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/util.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<!--Leaflet JS & CSS-->
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
+
+<link type="text/css"
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.css"
+      crossorigin=""/>
+<script src="https://unpkg.com/leaflet-sidebar@0.2.0/src/L.Control.Sidebar.js"
+        crossorigin=""></script>
 </html>
