@@ -19,6 +19,7 @@ app = Flask(__name__, static_url_path='', )
 # Code needed for image uploading
 app.config['SECRET_KEY'] = 'capstone123'
 app.config['UPLOADED_PHOTOS_DEST'] = 'uploads'
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
@@ -195,7 +196,7 @@ def updateAccuracy():
 def get_markers_data():
     conn = sqlite3.connect('Database.db')
     c = conn.cursor()
-    c.execute('SELECT latitude, longitude, name FROM Markers')
+    c.execute('SELECT latitude, longitude, name, date, time, threat FROM Markers')
     data = c.fetchall()
     conn.close()
     markers = []
@@ -203,43 +204,57 @@ def get_markers_data():
         markers.append({
             'lat': item[0],
             'lng': item[1],
-            'name': item[2]
+            'name': item[2],
+            'date': item[3],
+            'time': item[4],
+            'threat': item[5]
         })
     return jsonify(markers)
 
 
 @app.route('/insert_marker', methods=['POST'])
 def insert_marker():
-    print('inserting marker')
-
     data = request.get_json()
     name = data['name']
     latitude = data['latitude']
     longitude = data['longitude']
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    date, time = timestamp.split(' ')
+    threat = data['threat']
 
-    conn = sqlite3.connect('database.db')
+    print(threat)
+    
+    conn = sqlite3.connect('Database.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM markers WHERE name=?", (name,))
+    c.execute("SELECT * FROM Markers WHERE name=?", (name,))
     existing_marker = c.fetchone()
-
+    
     if existing_marker is None:
-        c.execute("INSERT INTO markers (name, latitude, longitude) VALUES (?, ?, ?)", (name, latitude, longitude))
+        c.execute("INSERT INTO Markers (name, latitude, longitude, date, time, threat) VALUES (?, ?, ?, ?, ?, ?)", (name, latitude, longitude, date, time, threat))
         conn.commit()
-        response = {'status': 'success'}
+        response = {'status': 'success', 'date': date, 'time': time}
     else:
         response = {'status': 'error', 'message': 'Marker with this name already exists'}
-
+        
     conn.close()
-
+    
     return jsonify(response)
 
 
 @app.route('/send-text', methods=['POST'])
 def send_text():
-    phone_number = '+16135014983'
+    data = request.get_json()
+    phone_number = data['phone_number']
+    name = data['name']
+    latitude = data['latitude']
+    longitude = data['longitude']
+    date = data['date']
+    time = data['time']
+    threat = data['threat']
+    message = f'Alert: {name} is detected! Location: ({latitude}, {longitude}) Date: {date} Time: {time} Threat: {threat}'
     response = sns_client.publish(
         PhoneNumber=phone_number,
-        Message='Hello from AWS SNS!'
+        Message=message
     )
     return jsonify({'message': 'Text message sent!'})
 
@@ -259,6 +274,10 @@ def get_criminals_data():
             'Color': item[2]
         })
     return jsonify(criminals)
+
+@app.route('/alarm.mp3')
+def play_alarm():
+    return send_from_directory(app.static_folder, 'alarm.mp3')
 
 
 def test1():
