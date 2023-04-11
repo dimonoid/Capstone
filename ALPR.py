@@ -1,3 +1,4 @@
+import datetime
 import difflib
 import re
 import threading
@@ -93,12 +94,21 @@ def tesseract_recognize_text(image_input):
     return text
 
 
-def readLP2(image_input, angle=30, step=2):
+
+
+def readLP2(image_input, angle=30, step=2, timer=None):
+    timer.print(1.1)
+
     blob = cv2.dnn.blobFromImage(image_input, 1 / 255.0, (416, 416), swapRB=True, crop=False)
     # blob_to_show = blob[0, :, :, :].transpose(1, 2, 0)
 
     network.setInput(blob)
+
+    timer.print(1.2)
+
     output_from_network = network.forward(layers_names_output)
+
+    timer.print(1.3)
 
     bounding_boxes = []
     confidences = []
@@ -121,12 +131,16 @@ def readLP2(image_input, angle=30, step=2):
                 confidences.append(float(confidence_current))
                 class_numbers.append(class_current)
 
+    timer.print(1.4)
+
     results = cv2.dnn.NMSBoxes(bounding_boxes, confidences, probability_minimum, threshold)
 
     image_input_clean_copy = image_input.copy()
 
     dict_of_possible_plates = {}
     dict_of_return_matches = {}
+
+    timer.print(1.5)
 
     def th(crop, angle_trial, j):
         crop_rotated = rotate_image(crop, angle_trial)
@@ -165,6 +179,7 @@ def readLP2(image_input, angle=30, step=2):
 
             del threads
 
+        timer.print(1.61)
     else:
         # if no license plates detected, try to recognize text on the whole image
         image_input_clean_copy = cv2.resize(image_input_clean_copy, (0, 0), fx=0.25, fy=0.25)
@@ -181,6 +196,8 @@ def readLP2(image_input, angle=30, step=2):
 
         del threads
 
+        timer.print(1.62)
+
     list_possible_plates = list(dict_of_possible_plates.keys())
 
     for raw_plate in list_possible_plates:
@@ -194,11 +211,15 @@ def readLP2(image_input, angle=30, step=2):
 
     list_return_matches.sort()  # sort alphabetically
     list_return_matches.sort(key=lambda x: len(x), reverse=True)
-    print(list_return_matches)
+
+    # print(list_return_matches)
     # display_image(image_input)
 
     if len(list_return_matches) > 0:
         cv2.putText(image_input, list_return_matches[0], (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 5)
+    cv2.putText(image_input, timer.print_total(), (0, 80), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 5)
+
+    timer.print(1.7)
 
     return list_return_matches, image_input
 

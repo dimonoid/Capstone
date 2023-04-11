@@ -1,3 +1,5 @@
+import datetime
+
 import boto3
 import cv2
 from flask import jsonify, send_from_directory
@@ -60,9 +62,30 @@ def favicon():
                                mimetype='image/vnd.microsoft.icon')
 
 
+class Timer:
+    def __init__(self, N):
+        self.start_time = self.time_last = datetime.datetime.now()
+        self.N = N
+
+    def print(self, text):
+        time_now = datetime.datetime.now()
+        print(N, text, (time_now - self.time_last))
+        self.time_last = time_now
+
+    def print_total(self):
+        return str(datetime.datetime.now() - self.start_time)
+
+
+N = 0
+
+timer_frame_to_frame = Timer(N=0)  # to measure overall FPS without accounting for delays
+
+
 def gen_frames(debug=False, filename=None):
     global running
     global currentName
+    global N
+    global timer_frame_to_frame
     """Generates facial predictions either from camera or local files"""
     print('gen_frames 1 started')
     if running:
@@ -82,18 +105,40 @@ def gen_frames(debug=False, filename=None):
                 success, frame = camera.read()
 
             if success:
-                print('gen_frames next frame processing...')
+                print('gen_frames next frame', N, 'processing...')
+                timer = Timer(N=N)  # for each frame, to measure time in pipeline
+                N += 1
+
                 # use pipe and filter
-                list_of_possible_plates, frame = ALPR.readLP2(frame, 10, 2)
+                # print current time
+                print(1, datetime.datetime.now().strftime("%H:%M:%S.%f"))
+
+                # diminishing returns!,
+                # (0, 1) is fastest but too low accuracy,
+                # (10, 2) is optimal with lower accuracy,
+                # (10, 1) is optimal with higher accuracy,
+                # (45, 1) is too slow with the highest accuracy
+
+                list_of_possible_plates, frame = ALPR.readLP2(frame, 10, 2, timer)
+                print(list_of_possible_plates)
+                print(2, datetime.datetime.now().strftime("%H:%M:%S.%f"))
 
                 face_names, frame = face_engine.getFaces(frame)
+                print(face_names)
+                print(3, datetime.datetime.now().strftime("%H:%M:%S.%f"))
 
                 currentName = face_names[0] if len(face_names) > 0 else "Unknown"
 
-                frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)  # optimization
+                # frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)  # optimization
+
+                cv2.putText(frame,
+                            timer_frame_to_frame.print_total(), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 5)  # FPS
+                timer_frame_to_frame = Timer(N=0)
 
                 ret, buffer = cv2.imencode('.jpg', frame)
                 frame_ret = buffer.tobytes()
+
+                print(4, datetime.datetime.now().strftime("%H:%M:%S.%f"))
 
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame_ret + b'\r\n')
