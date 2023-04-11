@@ -133,7 +133,8 @@ def gen_frames(debug=False, filename=None):
                 # frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)  # optimization
 
                 cv2.putText(frame,
-                            timer_frame_to_frame.print_total(), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 5)  # FPS
+                            timer_frame_to_frame.print_total(), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255),
+                            5)  # FPS
                 timer_frame_to_frame = Timer(N=0)
 
                 ret, buffer = cv2.imencode('.jpg', frame)
@@ -268,21 +269,22 @@ def insert_marker():
     threat = data['threat']
 
     print(threat)
-    
+
     conn = sqlite3.connect('Database.db')
     c = conn.cursor()
     c.execute("SELECT * FROM Markers WHERE name=?", (name,))
     existing_marker = c.fetchone()
-    
+
     if existing_marker is None:
-        c.execute("INSERT INTO Markers (name, latitude, longitude, date, time, threat) VALUES (?, ?, ?, ?, ?, ?)", (name, latitude, longitude, date, time, threat))
+        c.execute("INSERT INTO Markers (name, latitude, longitude, date, time, threat) VALUES (?, ?, ?, ?, ?, ?)",
+                  (name, latitude, longitude, date, time, threat))
         conn.commit()
         response = {'status': 'success', 'date': date, 'time': time}
     else:
         response = {'status': 'error', 'message': 'Marker with this name already exists'}
-        
+
     conn.close()
-    
+
     return jsonify(response)
 
 
@@ -319,6 +321,7 @@ def get_criminals_data():
             'Color': item[2]
         })
     return jsonify(criminals)
+
 
 @app.route('/alarm.mp3')
 def play_alarm():

@@ -94,8 +94,6 @@ def tesseract_recognize_text(image_input):
     return text
 
 
-
-
 def readLP2(image_input, angle=30, step=2, timer=None):
     timer.print(1.1)
 
