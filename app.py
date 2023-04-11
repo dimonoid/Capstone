@@ -80,6 +80,8 @@ N = 0
 
 timer_frame_to_frame = Timer(N=0)  # to measure overall FPS without accounting for delays
 
+readLP2_pipelined_instance = ALPR.readLP2_pipelined()
+
 
 def gen_frames(debug=False, filename=None):
     global running
@@ -119,7 +121,8 @@ def gen_frames(debug=False, filename=None):
                 # (10, 1) is optimal with higher accuracy,
                 # (45, 1) is too slow with the highest accuracy
 
-                list_of_possible_plates, frame = ALPR.readLP2(frame, 10, 2, timer)
+                # list_of_possible_plates, frame = ALPR.readLP2(frame, 10, 2, timer)
+                list_of_possible_plates, frame = readLP2_pipelined_instance.put(frame, 10, 2, timer)
                 print(list_of_possible_plates)
                 print(2, datetime.datetime.now().strftime("%H:%M:%S.%f"))
 
@@ -132,7 +135,8 @@ def gen_frames(debug=False, filename=None):
                 # frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)  # optimization
 
                 cv2.putText(frame,
-                            timer_frame_to_frame.print_total(), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 5)  # FPS
+                            timer_frame_to_frame.print_total(), (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255),
+                            5)  # FPS
                 timer_frame_to_frame = Timer(N=0)
 
                 ret, buffer = cv2.imencode('.jpg', frame)
