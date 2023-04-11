@@ -122,7 +122,11 @@ def gen_frames(debug=False, filename=None):
                 # (45, 1) is too slow with the highest accuracy
 
                 # list_of_possible_plates, frame = ALPR.readLP2(frame, 10, 2, timer)
-                list_of_possible_plates, frame = readLP2_pipelined_instance.put(frame, 10, 2, timer)
+                try:
+                    list_of_possible_plates, frame = readLP2_pipelined_instance.put(frame, 10, 2, timer)
+                except Exception as e:
+                    print(e)
+                    list_of_possible_plates = []
                 print(list_of_possible_plates)
                 print(2, datetime.datetime.now().strftime("%H:%M:%S.%f"))
 
